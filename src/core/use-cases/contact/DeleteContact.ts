@@ -6,8 +6,8 @@ export class DeleteContact {
     this.contactRepository = contactRepository
   }
 
-  async execute (id: number, partnerId: number) {
-    const data = Contact.delete(id, partnerId)
-    return this.contactRepository.delete(data.id, data.partnerId)
+  async execute (id: number) {
+    const data = Contact.delete(id)
+    return this.contactRepository.delete(data.id)
   }
 }

@@ -41,7 +41,7 @@ export class ContactRepositoryDb implements IContactRepositoryDbMethods {
     return await entityManager.update(ContactModel, id, { ...contact, partnerId: partnerId })
   }
 
-  async delete (id: number, partnerId: number) {
-    return await entityManager.delete(ContactModel, { partnerId: partnerId, id: id })
+  async delete (id: number) {
+    return await entityManager.delete(ContactModel, id)
   }
 }

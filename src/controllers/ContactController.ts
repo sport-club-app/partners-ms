@@ -85,8 +85,7 @@ class ContractController {
     try {
       if (!data.partnerId) return res.status(422).send({ message: "Dados inválidos!" })
       const result = await factory.deleteContactUseCase.execute(
-        Number(req.params.id),
-        data.partnerId
+        Number(req.params.id)
       )
       return res.status(204).send(result)
     } catch (error) {

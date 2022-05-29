@@ -333,21 +333,6 @@
                         "required": true
                     }
                 ],
-                "requestBody": {
-                    "content": {
-                        "application/json; charset=utf-8": {
-                            "schema": {
-                                "required": ["partnerId"],
-                                "properties": {
-                                    "partnerId": {
-                                        "type": "number",
-                                        "description": "vincula contato ao sócio"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
                 "responses": {
                     "422": {
                         "description": "Dados invalidos"

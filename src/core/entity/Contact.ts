@@ -27,15 +27,14 @@ export class Contact {
       })
     }
 
-    static create ({ address, email, phone }: Contact) {
-      const contract = new Contact({ address, email, phone })
+    static create ({ address, email, phone, partnerId }: Contact) {
+      const contract = new Contact({ address, email, phone, partnerId })
       return contract
     }
 
-    static delete (id: number, partnerId: number) {
+    static delete (id: number) {
       return {
-        id,
-        partnerId
+        id
       }
     }
 }
