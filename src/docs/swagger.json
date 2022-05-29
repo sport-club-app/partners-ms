@@ -1151,7 +1151,7 @@
                 }
             }
         },
-        "/contracts/one": {
+        "/contracts/create": {
             "post": {
                 "summary": "Cria um novo contrato",
                 "description": "Essa rota será responsável por criar um novo contrato. O campo partnerId e modalityId são obrigatórios",

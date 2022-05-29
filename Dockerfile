@@ -27,8 +27,8 @@ ENV DB_DATABASE=partners
 ENV DB_PASSWORD=partners
 ENV NODE_ENV=production
 
-# RUN chmod +x ./.docker/entrypoint.sh
-# RUN /bin/bash ./.docker/entrypoint.sh
+RUN chmod +x .docker/entrypoint.sh
+ENTRYPOINT .docker/entrypoint.sh
 
 EXPOSE 3001
 
