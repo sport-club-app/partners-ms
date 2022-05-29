@@ -374,7 +374,7 @@
             "get": {
                 "summary": "Listagem de sócios",
                 "description": "Essa rota será responsável por listar todos sócios armazenados no banco de dados",
-                "tags": ["Partner"],
+                "tags": ["Partners"],
                 "parameters": [
                     {
                         "name": "token",
@@ -430,7 +430,7 @@
             "get": {
                 "summary": "Busca de um sócio pelo id",
                 "description": "Essa rota será responsável por buscar um sócio pelo id",
-                "tags": ["Partner"],
+                "tags": ["Partners"],
                 "parameters": [
                     {
                         "name": "id",
@@ -492,7 +492,7 @@
             "post": {
                 "summary": "Cria um novo sócio",
                 "description": "Essa rota será responsável por criar um novo sócio",
-                "tags": ["Partner"],
+                "tags": ["Partners"],
                 "requestBody": {
                     "content": {
                         "application/json; charset=utf-8": {
@@ -570,7 +570,7 @@
             "put": {
                 "summary": "Atualiza um sócio",
                 "description": "Essa rota será responsável por atualizar um sócio pelo",
-                "tags": ["Partner"],
+                "tags": ["Partners"],
                 "parameters": [
                     {
                         "name": "id",
@@ -642,7 +642,7 @@
             "delete": {
                 "summary": "Deleta um sócio",
                 "description": "Essa rota será responsável por deletar um sócio",
-                "tags": ["Partner"],
+                "tags": ["Partners"],
                 "parameters": [
                     {
                         "name": "id",
@@ -695,7 +695,7 @@
             "get": {
                 "summary": "Listagem de modalidades",
                 "description": "Essa rota será responsável por listar todas modalidades cadastradas no banco de dados",
-                "tags": ["Modality"],
+                "tags": ["Modalities"],
                 "parameters": [
                     {
                         "name": "token",
@@ -748,7 +748,7 @@
             "get": {
                 "summary": "busca uma modalidade pelo id",
                 "description": "Essa rota será responsável por buscar uma modalidade pelo id",
-                "tags": ["Modality"],
+                "tags": ["Modalities"],
                 "parameters": [
                     {
                         "name": "id",
@@ -807,7 +807,7 @@
             "post": {
                 "summary": "Cria uma nova modalidade",
                 "description": "Essa rota será responsável por criar uma nova modalidade",
-                "tags": ["Modality"],
+                "tags": ["Modalities"],
                 "requestBody": {
                     "content": {
                         "application/json; charset=utf-8": {
@@ -879,7 +879,7 @@
             "put": {
                 "summary": "Atualiza uma modalide",
                 "description": "Essa rota será responsável por atualizar uma modalidade",
-                "tags": ["Modality"],
+                "tags": ["Modalities"],
                 "parameters": [
                     {
                         "name": "id",
@@ -951,7 +951,7 @@
             "delete": {
                 "summary": "Deleta uma modalide",
                 "description": "Essa rota será responsável por deletar uma modalidade",
-                "tags": ["Modality"],
+                "tags": ["Modalities"],
                 "parameters": [
                     {
                         "name": "id",
@@ -1004,7 +1004,7 @@
             "get": {
                 "summary": "Listagem de contratos",
                 "description": "Essa rota será responsável por listar todos contratos cadastrados no banco de dados",
-                "tags": ["Contract"],
+                "tags": ["Contracts"],
                 "parameters": [
                     {
                         "name": "token",
@@ -1069,7 +1069,7 @@
             "get": {
                 "summary": "busca um contrato pelo id",
                 "description": "Essa rota será responsável por buscar um contrato pelo id",
-                "tags": ["Contract"],
+                "tags": ["Contracts"],
                 "parameters": [
                     {
                         "name": "id",
@@ -1140,7 +1140,7 @@
             "post": {
                 "summary": "Cria um novo contrato",
                 "description": "Essa rota será responsável por criar um novo contrato. O campo partnerId e modalityId são obrigatórios",
-                "tags": ["Contract"],
+                "tags": ["Contracts"],
                 "requestBody": {
                     "content": {
                         "application/json; charset=utf-8": {
@@ -1232,7 +1232,7 @@
             "put": {
                 "summary": "Atualiza um contrato",
                 "description": "Essa rota será responsável por atualizar um contrato. O campo partnerId é obrigatório",
-                "tags": ["Contract"],
+                "tags": ["Contracts"],
                 "parameters": [
                     {
                         "name": "id",
@@ -1324,7 +1324,7 @@
             "delete": {
                 "summary": "Deleta um contrato",
                 "description": "Essa rota será responsável por deletar um contato. O campo partnerId é obrigatório",
-                "tags": ["Contract"],
+                "tags": ["Contracts"],
                 "parameters": [
                     {
                         "name": "id",
@@ -1566,6 +1566,7 @@
                         "required": true
                     }
                 ],
+
                 "responses": {
                     "500": {
                         "description": "Erro! contate o administrador do sistema"

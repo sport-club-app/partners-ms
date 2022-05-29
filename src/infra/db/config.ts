@@ -23,7 +23,9 @@ createConnection({
   ],
   synchronize: true,
   logging: process.env.NODE_ENV === "development",
-  timezone: process.env.TIMEZONE
+  timezone: process.env.TIMEZONE,
+  connectTimeout: 20000,
+  acquireTimeout: 20000
 }).then(connection => {
   runFactory(connection)
   console.log(FgGreen, "BANCO DE TESTE CRIADO COM SUCESSO!")
