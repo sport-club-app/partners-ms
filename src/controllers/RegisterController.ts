@@ -49,7 +49,7 @@ class RegisterController {
         if (findEmail.length > 0) return res.status(422).send({ message: "Erro ao processar requisição" })
         const contacts = await saveContactUseCase.execute(dataContact)
 
-        await producerNotification.execute(JSON.stringify(contacts))
+        await producerNotification.execute(JSON.stringify(contacts), "partners-ms-notification")
 
         const dataModalities = req.body.modalities
         const resultModality: any = await getModalityUseCase.execute(
