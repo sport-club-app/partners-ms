@@ -12,10 +12,10 @@ export const server = express()
 server.use(cors())
 server.use(express.json())
 
-server.get(`/${getVersionApi()}`, (_, res) => res.send({ message: "partners-ms is running", date: new Date() }))
+server.get(`/${getVersionApi()}/health`, (_, res) => res.send({ message: "partners-ms is running", date: new Date() }))
 server.use(`/${getVersionApi()}/docs`, swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 server.get("/", (_, res) => {
-  res.redirect(`/${getVersionApi()}`)
+  res.redirect(`/${getVersionApi()}/health`)
 })
 
 server.use(function (req: Request, res: Response, next) {
@@ -23,8 +23,10 @@ server.use(function (req: Request, res: Response, next) {
     req.headers.authorization = `bearer ${req.headers.token.toString()}`
   }
   const token = req.headers.authorization
-  if (!token.split(" ")[1]) return res.status(500).send({ message: "token not found!" })
-  next()
+  if (token) {
+    if (!token.split(" ")[1]) return res.status(500).send({ message: "token not found!" })
+    next()
+  }
 })
 
 server.use(keycloak.middleware({

@@ -38,6 +38,7 @@
     "node-input-validator": "^4.4.1",
     "prettier": "^2.6.1",
     "qs": "^6.10.3",
+    "redis": "^4.1.0",
     "reflect-metadata": "^0.1.13",
     "supertest": "^6.2.2",
     "swagger-ui-express": "^4.1.6",
