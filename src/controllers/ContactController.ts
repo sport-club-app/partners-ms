@@ -1,98 +1,131 @@
 import "dotenv/config"
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import { fieldValidated } from "@Validators/contactValidator"
-import { Erros } from "@Validators/registerValidator"
 import { contactFactory } from "@Factory/contactFactory"
 import { Contact } from "@Core/entity"
+import { errorHandler } from "src/exceptions/error-handler"
+import { APIError } from "src/exceptions/base-error"
+import { HttpStatusCode } from "src/exceptions/interfaces"
+import businessError from "src/exceptions/business-error"
 
-const factory = contactFactory()
+const {
+  deleteContactUseCase,
+  getAllContacts,
+  getContactUseCase,
+  producerNotification,
+  saveContactUseCase,
+  updateContactUseCase
+} = contactFactory()
 
 class ContractController {
-  async saveOneContact (req: Request, res: Response) {
+  async saveOneContact (req: Request, res: Response, next: NextFunction) {
     const data: Contact = req.body
     try {
-      const matched: Erros = await fieldValidated(data)
+      const matched = await fieldValidated(data)
       if (matched) {
-        return res.status(matched.status).send(matched.body)
-      } else {
-        const result = await factory.saveContactUseCase.execute(data)
-        await factory.producerNotification.execute(JSON.stringify(result), process.env.PARTNER_TOPIC_CONTACT)
-        return res.status(201).send(result)
+        throw new APIError("UNPROCESSABLE_ENTITY",
+          HttpStatusCode.UNPROCESSABLE_ENTITY,
+          true,
+          businessError.UNPROCESSABLE_ENTITY,
+          matched
+        )
       }
+      const result = await saveContactUseCase.execute(data)
+      await producerNotification.execute(JSON.stringify(result), process.env.PARTNER_TOPIC_CONTACT)
+      return res.status(201).send(result)
     } catch (error) {
-      if (process.env.NODE_ENV === "development") return res.status(500).send(error)
-      return res
-        .status(500)
-        .send({ message: "Erro! contate o administrador do sistema" })
+      return errorHandler.returnError(error, req, res, next)
     }
   }
 
-  async getContract (req: Request, res: Response) {
+  async getContact (req: Request, res: Response, next: NextFunction) {
     try {
-      const result = await factory.getContactUseCase.execute(
-        Number(req.params.id)
-      )
+      const result = await getContactUseCase.execute(Number(req.params.id))
       if (!result) {
-        return res
-          .status(400)
-          .send({ message: "Erro ao processar requisição" })
+        throw new APIError("NOT_FOUND",
+          HttpStatusCode.NOT_FOUND,
+          true,
+          businessError.CONTACT_NOT_FOUND,
+          undefined
+        )
       }
       return res.status(200).send(result)
     } catch (error) {
-      if (process.env.NODE_ENV === "development") return res.status(500).send(error)
-      return res
-        .status(500)
-        .send({ message: "Erro! contate o administrador do sistema" })
+      return errorHandler.returnError(error, req, res, next)
     }
   }
 
-  async getAllContacts (req: Request, res: Response) {
+  async getAllContacts (req: Request, res: Response, next: NextFunction) {
     try {
-      const result = await factory.getAllContacts.execute()
-      if (!result) return res.status(400).send({ message: "Erro ao processar requisição" })
+      const result = await getAllContacts.execute()
+      if (!result) {
+        throw new APIError("NOT_FOUND",
+          HttpStatusCode.NOT_FOUND,
+          true,
+          businessError.CONTACT_NOT_FOUND,
+          undefined
+        )
+      }
       return res.status(200).send(result)
     } catch (error) {
-      if (process.env.NODE_ENV === "development") return res.status(500).send(error)
-      return res
-        .status(500)
-        .send({ message: "Erro! contate o administrador do sistema" })
+      return errorHandler.returnError(error, req, res, next)
     }
   }
 
-  async updateContact (req: Request, res: Response) {
+  async updateContact (req: Request, res: Response, next: NextFunction) {
     const data: Contact = req.body
     try {
       if (!data.partnerId) {
-        return res.status(422).send({ message: "Dados inválidos!" })
+        throw new APIError("NOT_FOUND",
+          HttpStatusCode.NOT_FOUND,
+          true,
+          businessError.PARTNER_NOT_FOUND,
+          undefined
+        )
       }
-      const result = await factory.updateContactUseCase.execute(
+      const result = await updateContactUseCase.execute(
         Number(req.params.id),
         data.partnerId,
         data
       )
-      await factory.producerNotification.execute(JSON.stringify(result), process.env.PARTNER_TOPIC_CONTACT)
+      if (!result) {
+        throw new APIError("NOT_FOUND",
+          HttpStatusCode.NOT_FOUND,
+          true,
+          businessError.CONTACT_NOT_FOUND,
+          undefined
+        )
+      }
+      await producerNotification.execute(JSON.stringify(result), process.env.PARTNER_TOPIC_CONTACT)
       return res.status(201).send(result)
     } catch (error) {
-      if (process.env.NODE_ENV === "development") return res.status(500).send(error)
-      return res
-        .status(500)
-        .send({ message: "Erro! contate o administrador do sistema" })
+      return errorHandler.returnError(error, req, res, next)
     }
   }
 
-  async deleteContact (req: Request, res: Response) {
+  async deleteContact (req: Request, res: Response, next: NextFunction) {
     const data: Contact = req.body
     try {
-      if (!data.partnerId) return res.status(422).send({ message: "Dados inválidos!" })
-      const result = await factory.deleteContactUseCase.execute(
-        Number(req.params.id)
-      )
+      if (!data.partnerId) {
+        throw new APIError("NOT_FOUND",
+          HttpStatusCode.NOT_FOUND,
+          true,
+          businessError.PARTNER_NOT_FOUND,
+          undefined
+        )
+      }
+      const result = await deleteContactUseCase.execute(Number(req.params.id))
+      if (!result) {
+        throw new APIError("NOT_FOUND",
+          HttpStatusCode.NOT_FOUND,
+          true,
+          businessError.PARTNER_NOT_FOUND,
+          undefined
+        )
+      }
       return res.status(204).send(result)
     } catch (error) {
-      if (process.env.NODE_ENV === "development") return res.status(500).send(error)
-      return res
-        .status(500)
-        .send({ message: "Erro! contate o administrador do sistema" })
+      return errorHandler.returnError(error, req, res, next)
     }
   }
 }

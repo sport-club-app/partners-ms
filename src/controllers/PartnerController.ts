@@ -1,99 +1,104 @@
 import "dotenv/config"
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import { fieldValidated } from "@Validators/partnerValidation"
-import { Erros } from "@Validators/registerValidator"
-import {
-  DeletePartner,
-  GetPartner,
-  SavePartner,
-  GetAllPartner,
-  UpdatePartner
-} from "@Core/use-cases/partner"
-import { PartnerRepositoryDb } from "@Repository/PartnerRepositoryDb"
 import { Partner } from "@Core/entity"
-
-const partnerRepository = new PartnerRepositoryDb()
-const savePartnerUseCase = new SavePartner(partnerRepository)
-const updatePartnerPartnerUseCase = new UpdatePartner(partnerRepository)
-const getPartnerPartnerUseCase = new GetPartner(partnerRepository)
-const getAllPartnerPartnerUseCase = new GetAllPartner(partnerRepository)
-const deletePartnerPartnerUseCase = new DeletePartner(partnerRepository)
-
+import { partnerFactory } from "@Factory/partnerFactory"
+import { errorHandler } from "src/exceptions/error-handler"
+import { APIError } from "src/exceptions/base-error"
+import { HttpStatusCode } from "src/exceptions/interfaces"
+import businessError from "src/exceptions/business-error"
+const {
+  deletePartnerPartnerUseCase,
+  getAllPartnerPartnerUseCase,
+  getPartnerPartnerUseCase,
+  savePartnerUseCase,
+  updatePartnerPartnerUseCase
+} = partnerFactory()
 class PartnerController {
-  async savePartner (req: Request, res: Response) {
+  async savePartner (req: Request, res: Response, next: NextFunction) {
     const data: Partner = req.body
     try {
-      const matched: Erros = await fieldValidated(data)
+      const matched = await fieldValidated(data)
       if (matched) {
-        return res.status(matched.status).send(matched.body)
-      } else {
-        const result = await savePartnerUseCase.execute(data)
-        return res.status(201).send(result)
+        throw new APIError("UNPROCESSABLE_ENTITY",
+          HttpStatusCode.UNPROCESSABLE_ENTITY,
+          true,
+          businessError.UNPROCESSABLE_ENTITY,
+          matched
+        )
       }
-    } catch (error) {
-      if (process.env.NODE_ENV === "development") return res.status(500).send(error)
-      return res
-        .status(500)
-        .send({ message: "Erro! contate o administrador do sistema" })
-    }
-  }
-
-  async updatePartner (req: Request, res: Response) {
-    const data: Partner = req.body
-    try {
-      const result = await updatePartnerPartnerUseCase.execute(
-        Number(req.params.id),
-        data
-      )
+      const result = await savePartnerUseCase.execute(data)
       return res.status(201).send(result)
     } catch (error) {
-      if (process.env.NODE_ENV === "development") return res.status(500).send(error)
-      return res
-        .status(500)
-        .send({ message: "Erro! contate o administrador do sistema" })
+      return errorHandler.returnError(error, req, res, next)
     }
   }
 
-  async getPartner (req: Request, res: Response) {
+  async updatePartner (req: Request, res: Response, next: NextFunction) {
+    const data: Partner = req.body
     try {
-      const result = await getPartnerPartnerUseCase.execute(
-        Number(req.params.id)
-      )
-      if (!result) return res.status(400).send({ message: "Erro ao processar requisição" })
+      const result = await updatePartnerPartnerUseCase.execute(Number(req.params.id), data)
+      if (result.affected == 0) {
+        throw new APIError("NOT_FOUND",
+          HttpStatusCode.NOT_FOUND,
+          true,
+          businessError.PARTNER_NOT_FOUND,
+          undefined
+        )
+      }
+    } catch (error) {
+      return errorHandler.returnError(error, req, res, next)
+    }
+  }
+
+  async getPartner (req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await getPartnerPartnerUseCase.execute(Number(req.params.id))
+      if (!result) {
+        throw new APIError("NOT_FOUND",
+          HttpStatusCode.NOT_FOUND,
+          true,
+          businessError.PARTNER_NOT_FOUND,
+          undefined
+        )
+      }
       return res.status(200).send(result)
     } catch (error) {
-      if (process.env.NODE_ENV === "development") return res.status(500).send(error)
-      return res
-        .status(500)
-        .send({ message: "Erro! contate o administrador do sistema" })
+      return errorHandler.returnError(error, req, res, next)
     }
   }
 
-  async getAllPartners (req: Request, res: Response) {
+  async getAllPartners (req: Request, res: Response, next: NextFunction) {
     try {
       const result = await getAllPartnerPartnerUseCase.execute()
-      if (!result) return res.status(400).send({ message: "Erro ao processar requisição" })
+      if (!result) {
+        throw new APIError("NOT_FOUND",
+          HttpStatusCode.NOT_FOUND,
+          true,
+          businessError.PARTNER_NOT_FOUND,
+          undefined
+        )
+      }
       return res.status(200).send(result)
     } catch (error) {
-      if (process.env.NODE_ENV === "development") return res.status(500).send(error)
-      return res
-        .status(500)
-        .send({ message: "Erro! contate o administrador do sistema" })
+      return errorHandler.returnError(error, req, res, next)
     }
   }
 
-  async deletePartner (req: Request, res: Response) {
+  async deletePartner (req: Request, res: Response, next: NextFunction) {
     try {
-      const result = await deletePartnerPartnerUseCase.execute(
-        Number(req.params.id)
-      )
-      if (!result) return res.status(400).send({ message: "Erro ao processar requisição" })
+      const result = await deletePartnerPartnerUseCase.execute(Number(req.params.id))
+      if (!result) {
+        throw new APIError("NOT_FOUND",
+          HttpStatusCode.NOT_FOUND,
+          true,
+          businessError.PARTNER_NOT_FOUND,
+          undefined
+        )
+      }
       return res.status(200).send(result)
     } catch (error) {
-      if (process.env.NODE_ENV === "development") return res.status(500).send(error)
-      return res
-        .status(500)
-        .send({ message: "Erro! contate o administrador do sistema" })
+      return errorHandler.returnError(error, req, res, next)
     }
   }
 }

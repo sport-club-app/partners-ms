@@ -1,81 +1,123 @@
 import "dotenv/config"
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import { fieldValidated } from "@Validators/contractValidator"
-import { Erros } from "@Validators/registerValidator"
-import { ContractRepositoryDb } from "@Repository/ContractRepositoryDb"
-import { UpdateContractStatus, SaveOneContract, GetContract, GetAllContracts, DeleteContract } from "@Core/use-cases/contract"
 import { Contract } from "@Core/entity"
-
-const contractRepositoryDb = new ContractRepositoryDb()
-
-const updateContractStatusUseCase = new UpdateContractStatus(contractRepositoryDb)
-const saveOneContractUseCase = new SaveOneContract(contractRepositoryDb)
-const getContractUseCase = new GetContract(contractRepositoryDb)
-const getAllContractUseCase = new GetAllContracts(contractRepositoryDb)
-const deeleteContractUseCase = new DeleteContract(contractRepositoryDb)
+import { errorHandler } from "src/exceptions/error-handler"
+import { APIError } from "src/exceptions/base-error"
+import { HttpStatusCode } from "src/exceptions/interfaces"
+import businessError from "src/exceptions/business-error"
+import { contractFactory } from "@Factory/contractFactory"
+const {
+  deeleteContractUseCase,
+  getAllContractUseCase,
+  getContractUseCase,
+  saveOneContractUseCase,
+  updateContractStatusUseCase
+} = contractFactory()
 
 class ContractController {
-  async saveOneContract (req: Request, res: Response) {
+  async saveOneContract (req: Request, res: Response, next: NextFunction) {
     const data: Contract = req.body
     try {
-      const matched: Erros = await fieldValidated(data)
+      const matched = await fieldValidated(data)
       if (matched) {
-        return res.status(matched.status).send(matched.body)
-      } else {
-        const result = await saveOneContractUseCase.execute(data)
-        if (!result) return res.status(422).send({ message: "Erro ao processar requisição" })
-        return res.status(201).send(result)
+        throw new APIError("UNPROCESSABLE_ENTITY",
+          HttpStatusCode.UNPROCESSABLE_ENTITY,
+          true,
+          businessError.UNPROCESSABLE_ENTITY,
+          matched
+        )
       }
-    } catch (error) {
-      if (process.env.NODE_ENV === "development") return res.status(500).send(error)
-      return res.status(500).send({ message: "Erro! contate o administrador do sistema" })
-    }
-  }
-
-  async updateContractStatus (req: Request, res: Response) {
-    const data: Contract = req.body
-    try {
-      if (!data.partnerId) return res.status(422).send({ message: "Erro ao processar requisição" })
-      const result = await updateContractStatusUseCase.execute(Number(req.params.id), data.partnerId, data)
-      if (!result) return res.status(422).send({ message: "Erro ao processar requisição" })
+      const result = await saveOneContractUseCase.execute(data)
+      if (!result) {
+        throw new APIError("NOT_FOUND",
+          HttpStatusCode.NOT_FOUND,
+          true,
+          businessError.CONTRACT_NOT_FOUND,
+          undefined
+        )
+      }
       return res.status(201).send(result)
     } catch (error) {
-      if (process.env.NODE_ENV === "development") return res.status(500).send(error)
-      return res.status(500).send({ message: "Erro! contate o administrador do sistema" })
+      return errorHandler.returnError(error, req, res, next)
     }
   }
 
-  async getContract (req: Request, res: Response) {
-    try {
-      const result = await getContractUseCase.execute(Number(req.params.id))
-      if (!result) return res.status(400).send({ message: "Erro ao processar requisição" })
-      return res.status(200).send(result)
-    } catch (error) {
-      if (process.env.NODE_ENV === "development") return res.status(500).send(error)
-      return res.status(500).send({ message: "Erro! contate o administrador do sistema" })
-    }
-  }
-
-  async getAllContracts (req: Request, res: Response) {
-    try {
-      const result = await getAllContractUseCase.execute()
-      if (!result) return res.status(400).send({ message: "Erro ao processar requisição" })
-      return res.status(200).send(result)
-    } catch (error) {
-      if (process.env.NODE_ENV === "development") return res.status(500).send(error)
-      return res.status(500).send({ message: "Erro! contate o administrador do sistema" })
-    }
-  }
-
-  async deleteContract (req: Request, res: Response) {
+  async updateContractStatus (req: Request, res: Response, next: NextFunction) {
     const data: Contract = req.body
     try {
-      if (!data.partnerId) return res.status(422).send({ message: "Dados inválidos!" })
+      if (!data.partnerId) {
+        throw new APIError("NOT_FOUND",
+          HttpStatusCode.NOT_FOUND,
+          true,
+          businessError.PARTNER_NOT_FOUND,
+          undefined
+        )
+      }
+      const result = await updateContractStatusUseCase.execute(Number(req.params.id), data.partnerId, data)
+      if (!result) {
+        throw new APIError("NOT_FOUND",
+          HttpStatusCode.NOT_FOUND,
+          true,
+          businessError.CONTRACT_NOT_FOUND,
+          undefined
+        )
+      }
+      return res.status(201).send(result)
+    } catch (error) {
+      return errorHandler.returnError(error, req, res, next)
+    }
+  }
+
+  async getContract (req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await getContractUseCase.execute(Number(req.params.id))
+      if (!result) {
+        throw new APIError("NOT_FOUND",
+          HttpStatusCode.NOT_FOUND,
+          true,
+          businessError.CONTRACT_NOT_FOUND,
+          undefined
+        )
+      }
+      return res.status(200).send(result)
+    } catch (error) {
+      return errorHandler.returnError(error, req, res, next)
+    }
+  }
+
+  async getAllContracts (req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await getAllContractUseCase.execute()
+      if (!result) {
+        throw new APIError("NOT_FOUND",
+          HttpStatusCode.NOT_FOUND,
+          true,
+          businessError.CONTRACT_NOT_FOUND,
+          undefined
+        )
+      }
+      return res.status(200).send(result)
+    } catch (error) {
+      return errorHandler.returnError(error, req, res, next)
+    }
+  }
+
+  async deleteContract (req: Request, res: Response, next: NextFunction) {
+    const data: Contract = req.body
+    try {
+      if (!data.partnerId) {
+        throw new APIError("NOT_FOUND",
+          HttpStatusCode.NOT_FOUND,
+          true,
+          businessError.PARTNER_NOT_FOUND,
+          undefined
+        )
+      }
       const result = await deeleteContractUseCase.execute(Number(req.params.id), data.partnerId)
       return res.status(204).send(result)
     } catch (error) {
-      if (process.env.NODE_ENV === "development") return res.status(500).send(error)
-      return res.status(500).send({ message: "Erro! contate o administrador do sistema" })
+      return errorHandler.returnError(error, req, res, next)
     }
   }
 }
