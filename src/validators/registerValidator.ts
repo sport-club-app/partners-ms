@@ -1,20 +1,7 @@
 import niv from "node-input-validator"
 import { registerTranslate } from "./registerTranslate"
 
-export type Erros = {
-    status: number,
-    body: Object
-}
-
 export async function fieldValidated (data: any) {
-  if (!data) {
-    const error = {
-      status: 400,
-      body: "Erro ao executar operação"
-    }
-    return error
-  }
-
   const v = new niv.Validator(data,
     {
       partner: "required|object",
@@ -47,11 +34,5 @@ export async function fieldValidated (data: any) {
 
   const matched = await v.check()
 
-  if (!matched) {
-    const error = {
-      status: 422,
-      body: v.errors
-    }
-    return error
-  }
+  if (!matched) return v.errors
 }
