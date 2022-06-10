@@ -13,11 +13,11 @@
     },
     "servers": [
         {
-            "url": "http://localhost:3001/v1",
+            "url": "http://10.0.0.172:3001/v1",
             "description": "Api de teste"
         },
         {
-            "url": "http://localhost:3001/v1",
+            "url": "http://10.0.0.172:3001/v1",
             "description": "Api de produção"
         }
     ],

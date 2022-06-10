@@ -10,7 +10,7 @@ import { keycloak } from "@Infra/services/keycloak/config"
 export const router = express.Router()
 
 router.get("/contacts", keycloak.protect("view"), ContactController.getAllContacts)
-router.get("/contacts/:id", keycloak.protect("view"), ContactController.getContract)
+router.get("/contacts/:id", keycloak.protect("view"), ContactController.getContact)
 router.post("/contacts/create", keycloak.protect("edit"), ContactController.saveOneContact)
 router.put("/contacts/:id/update", keycloak.protect("edit"), ContactController.updateContact)
 router.delete("/contacts/:id/delete", keycloak.protect("delete"), ContactController.deleteContact)
