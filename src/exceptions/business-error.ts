@@ -1,0 +1,13 @@
+class BusinessError {
+    public TOKEN_NOT_FOUND = "TOKEN_NOT_FOUND";
+    public REGISTER_USER = "REGISTER_USER";
+    public GENERIC = "GENERIC";
+    public SAVED_TOKEN = "SAVED_TOKEN";
+    public CONTRACT_NOT_FOUND = "CONTRACT_NOT_FOUND"
+    public CONTACT_NOT_FOUND = "CONTACT_NOT_FOUND"
+    public PARTNER_NOT_FOUND = "PARTNER_NOT_FOUND"
+    public MODALITY_NOT_FOUND = "MODALITY_NOT_FOUND"
+    public UNPROCESSABLE_ENTITY = "UNPROCESSABLE_ENTITY"
+}
+
+export default new BusinessError()
