@@ -1,6 +1,11 @@
+// @ts-nocheck
 import { ModalityRepositoryMemory } from "../../../src/repository/ModalityRepositoryMemory"
 import { Modality } from "../../../src/core/entity/Modality"
-import { fieldValidated } from "../../../src/validators/modalityValidator"
+import ModalityController from "../../../src/controllers/ModalityController"
+import { APIError } from "../../../src/exceptions/base-error"
+import businessError from "../../../src/exceptions/business-error"
+import { HttpStatusCode } from "../../../src/exceptions/interfaces"
+import { getConfig } from "../../../src/infra/db/config"
 
 const dataValidated: Modality = {
   id: 123,
@@ -12,6 +17,7 @@ const repository = new ModalityRepositoryMemory()
 
 describe("Testes unitários de modalidades", () => {
   beforeAll(async () => {
+    jest.useFakeTimers()
     const list: Modality[] = [
       {
         name: "basket",
@@ -29,6 +35,10 @@ describe("Testes unitários de modalidades", () => {
 
     await repository.save(dataValidated)
   })
+
+  // afterAll(async () => {
+  //   await new Promise(resolve => setTimeout(() => resolve(), 10000)) // avoid jest open handle error
+  // })
 
   it("Não deve salvar um registro caso o nome seja omitido", async () => {
     const data = {
@@ -73,15 +83,41 @@ describe("Testes unitários de modalidades", () => {
 
   describe("Testes de validações", () => {
     it("Deve retornar erro 400 caso não seja passado nenhum dado", async () => {
-      const register = await fieldValidated(null)
-      const status = register.status
-      expect(status).toBe(400)
+      const req = { body: {} }
+      const res = { status: jest.fn().mockReturnThis(), send: jest.fn() }
+      const next = jest.fn()
+      await ModalityController.saveModality(req, res, next)
+      expect(res.send).toBeCalledWith(
+        new APIError("BAD_REQUEST",
+          HttpStatusCode.BAD_REQUEST,
+          true,
+          businessError.GENERIC,
+          undefined
+        )
+      )
     })
 
     it("Deve retornar erro 422 caso não seja passado uma string para o campo name", async () => {
-      const register = await fieldValidated({ body: { name: 1 } })
-      const status = register.status
-      expect(status).toBe(422)
+      const errors = {
+        data: {
+          name: {
+            message: "The name must be a string.",
+            rule: "string"
+          }
+        }
+      }
+      const req = { body: { name: 1 } }
+      const res = { status: jest.fn().mockReturnThis(), send: jest.fn() }
+      const next = jest.fn()
+      await ModalityController.saveModality(req, res, next)
+      expect(res.send).toBeCalledWith(
+        new APIError("UNPROCESSABLE_ENTITY",
+          HttpStatusCode.UNPROCESSABLE_ENTITY,
+          true,
+          businessError.UNPROCESSABLE_ENTITY,
+          errors
+        )
+      )
     })
   })
 })

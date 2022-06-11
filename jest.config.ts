@@ -4,5 +4,6 @@ export default {
   collectCoverage: true,
   coverageDirectory: "coverage",
   watchman: true,
-  verbose: true
+  verbose: true,
+  setupFilesAfterEnv: ["<rootDir>/__test__/setup.ts"]
 }

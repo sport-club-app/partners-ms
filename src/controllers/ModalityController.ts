@@ -2,10 +2,11 @@ import "dotenv/config"
 import { NextFunction, Request, Response } from "express"
 import { fieldValidated } from "@Validators/modalityValidator"
 import { modalityFactory } from "@Factory/modalityFactory"
-import { errorHandler } from "src/exceptions/error-handler"
-import { APIError } from "src/exceptions/base-error"
-import { HttpStatusCode } from "src/exceptions/interfaces"
-import businessError from "src/exceptions/business-error"
+import { errorHandler } from "../exceptions/error-handler"
+import { APIError } from "../exceptions/base-error"
+import { HttpStatusCode } from "../exceptions/interfaces"
+import businessError from "../exceptions/business-error"
+import { Modality } from "@Entity/Modality"
 const {
   deleteModalityUseCase,
   getAllModalityUseCase,
@@ -15,8 +16,9 @@ const {
 } = modalityFactory()
 class ModalityController {
   async saveModality (req: Request, res: Response, next: NextFunction) {
+    const data: Modality = req.body
     try {
-      const matched = await fieldValidated(req)
+      const matched = await fieldValidated(data)
       if (matched) {
         throw new APIError("UNPROCESSABLE_ENTITY",
           HttpStatusCode.UNPROCESSABLE_ENTITY,

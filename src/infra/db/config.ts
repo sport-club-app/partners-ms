@@ -8,7 +8,7 @@ import { runFactory } from "./factorys"
 import "dotenv/config"
 import { BgRed, FgGreen } from "../../../console.color"
 
-createConnection({
+export const getConfig = createConnection({
   type: process.env.DB_ENGINE,
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
@@ -24,9 +24,13 @@ createConnection({
   synchronize: true,
   logging: process.env.NODE_ENV === "development",
   timezone: process.env.TIMEZONE,
-  connectTimeout: 20000,
-  acquireTimeout: 20000
+  connectTimeout: 20000
+  // acquireTimeout: 20000
 }).then(connection => {
+  if (process.env.NODE_ENV === "test") {
+    connection.close()
+    return
+  }
   runFactory(connection)
   console.log(FgGreen, "BANCO DE TESTE CRIADO COM SUCESSO!")
 }).catch((error) => {

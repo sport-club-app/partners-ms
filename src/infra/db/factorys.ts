@@ -35,7 +35,8 @@ export async function runFactory (connection: Connection) {
   const execute = async () => {
     await Promise.all([
       await deleteTable(),
-      await insertData()
+      await insertData(),
+      await connection.close()
     ])
   }
 

@@ -3,10 +3,10 @@ import { NextFunction, Request, Response } from "express"
 import { fieldValidated } from "@Validators/contactValidator"
 import { contactFactory } from "@Factory/contactFactory"
 import { Contact } from "@Core/entity"
-import { errorHandler } from "src/exceptions/error-handler"
-import { APIError } from "src/exceptions/base-error"
+import { errorHandler } from "../exceptions/error-handler"
+import { APIError } from "../exceptions/base-error"
 import { HttpStatusCode } from "src/exceptions/interfaces"
-import businessError from "src/exceptions/business-error"
+import businessError from "../exceptions/business-error"
 
 const {
   deleteContactUseCase,
@@ -21,6 +21,14 @@ class ContractController {
   async saveOneContact (req: Request, res: Response, next: NextFunction) {
     const data: Contact = req.body
     try {
+      if (!data) {
+        throw new APIError("BAD_REQUEST",
+          HttpStatusCode.BAD_REQUEST,
+          true,
+          businessError.GENERIC,
+          undefined
+        )
+      }
       const matched = await fieldValidated(data)
       if (matched) {
         throw new APIError("UNPROCESSABLE_ENTITY",
@@ -75,6 +83,14 @@ class ContractController {
   async updateContact (req: Request, res: Response, next: NextFunction) {
     const data: Contact = req.body
     try {
+      if (!data) {
+        throw new APIError("BAD_REQUEST",
+          HttpStatusCode.BAD_REQUEST,
+          true,
+          businessError.GENERIC,
+          undefined
+        )
+      }
       if (!data.partnerId) {
         throw new APIError("NOT_FOUND",
           HttpStatusCode.NOT_FOUND,
@@ -106,6 +122,14 @@ class ContractController {
   async deleteContact (req: Request, res: Response, next: NextFunction) {
     const data: Contact = req.body
     try {
+      if (!data) {
+        throw new APIError("BAD_REQUEST",
+          HttpStatusCode.BAD_REQUEST,
+          true,
+          businessError.GENERIC,
+          undefined
+        )
+      }
       if (!data.partnerId) {
         throw new APIError("NOT_FOUND",
           HttpStatusCode.NOT_FOUND,
