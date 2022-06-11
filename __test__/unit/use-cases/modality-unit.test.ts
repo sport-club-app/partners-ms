@@ -5,7 +5,6 @@ import ModalityController from "../../../src/controllers/ModalityController"
 import { APIError } from "../../../src/exceptions/base-error"
 import businessError from "../../../src/exceptions/business-error"
 import { HttpStatusCode } from "../../../src/exceptions/interfaces"
-import { getConfig } from "../../../src/infra/db/config"
 
 const dataValidated: Modality = {
   id: 123,
@@ -35,10 +34,6 @@ describe("Testes unitários de modalidades", () => {
 
     await repository.save(dataValidated)
   })
-
-  // afterAll(async () => {
-  //   await new Promise(resolve => setTimeout(() => resolve(), 10000)) // avoid jest open handle error
-  // })
 
   it("Não deve salvar um registro caso o nome seja omitido", async () => {
     const data = {
@@ -101,7 +96,7 @@ describe("Testes unitários de modalidades", () => {
       const errors = {
         data: {
           name: {
-            message: "The name must be a string.",
+            message: "Deve ser uma string",
             rule: "string"
           }
         }

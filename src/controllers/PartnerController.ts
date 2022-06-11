@@ -3,10 +3,10 @@ import { NextFunction, Request, Response } from "express"
 import { fieldValidated } from "@Validators/partnerValidation"
 import { Partner } from "@Core/entity"
 import { partnerFactory } from "@Factory/partnerFactory"
-import { errorHandler } from "src/exceptions/error-handler"
-import { APIError } from "src/exceptions/base-error"
-import { HttpStatusCode } from "src/exceptions/interfaces"
-import businessError from "src/exceptions/business-error"
+import { errorHandler } from "../exceptions/error-handler"
+import { APIError } from "../exceptions/base-error"
+import { HttpStatusCode } from "../exceptions/interfaces"
+import businessError from "../exceptions/business-error"
 const {
   deletePartnerPartnerUseCase,
   getAllPartnerPartnerUseCase,

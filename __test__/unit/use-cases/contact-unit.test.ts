@@ -13,6 +13,7 @@ const repository = new ContactMemory()
 
 describe("Testes unitários de informacões de contato", () => {
   beforeAll(async () => {
+    jest.useFakeTimers()
     const list = [
       {
         address: "endereco 1",
