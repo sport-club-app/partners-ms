@@ -1,9 +1,9 @@
 import "dotenv/config"
 import { NextFunction, Request, Response } from "express"
 import { fieldValidated } from "@Validators/contactValidator"
-import { contactFactory } from "@Factory/contactFactory"
+import { contactContainer } from "@Container/contact-container"
 import { Contact } from "@Core/entity"
-import { errorHandler } from "../exceptions/error-handler"
+import { errorHandlerMiddleware } from "../middleware/error-handler"
 import { APIError } from "../exceptions/base-error"
 import { HttpStatusCode } from "src/exceptions/interfaces"
 import businessError from "../exceptions/business-error"
@@ -15,7 +15,7 @@ const {
   producerNotification,
   saveContactUseCase,
   updateContactUseCase
-} = contactFactory()
+} = contactContainer()
 
 class ContractController {
   async saveOneContact (req: Request, res: Response, next: NextFunction) {
@@ -42,7 +42,7 @@ class ContractController {
       await producerNotification.execute(JSON.stringify(result), process.env.PARTNER_TOPIC_CONTACT)
       return res.status(201).send(result)
     } catch (error) {
-      return errorHandler.returnError(error, req, res, next)
+      return errorHandlerMiddleware.returnError(error, req, res, next)
     }
   }
 
@@ -59,7 +59,7 @@ class ContractController {
       }
       return res.status(200).send(result)
     } catch (error) {
-      return errorHandler.returnError(error, req, res, next)
+      return errorHandlerMiddleware.returnError(error, req, res, next)
     }
   }
 
@@ -76,7 +76,7 @@ class ContractController {
       }
       return res.status(200).send(result)
     } catch (error) {
-      return errorHandler.returnError(error, req, res, next)
+      return errorHandlerMiddleware.returnError(error, req, res, next)
     }
   }
 
@@ -115,7 +115,7 @@ class ContractController {
       await producerNotification.execute(JSON.stringify(result), process.env.PARTNER_TOPIC_CONTACT)
       return res.status(201).send(result)
     } catch (error) {
-      return errorHandler.returnError(error, req, res, next)
+      return errorHandlerMiddleware.returnError(error, req, res, next)
     }
   }
 
@@ -149,7 +149,7 @@ class ContractController {
       }
       return res.status(204).send(result)
     } catch (error) {
-      return errorHandler.returnError(error, req, res, next)
+      return errorHandlerMiddleware.returnError(error, req, res, next)
     }
   }
 }

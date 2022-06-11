@@ -2,18 +2,18 @@ import "dotenv/config"
 import { NextFunction, Request, Response } from "express"
 import { fieldValidated } from "@Validators/contractValidator"
 import { Contract } from "@Core/entity"
-import { errorHandler } from "src/exceptions/error-handler"
+import { errorHandlerMiddleware } from "@Middleware/error-handler"
 import { APIError } from "src/exceptions/base-error"
 import { HttpStatusCode } from "src/exceptions/interfaces"
 import businessError from "src/exceptions/business-error"
-import { contractFactory } from "@Factory/contractFactory"
+import { contractContainer } from "@Container/contract-container"
 const {
   deeleteContractUseCase,
   getAllContractUseCase,
   getContractUseCase,
   saveOneContractUseCase,
   updateContractStatusUseCase
-} = contractFactory()
+} = contractContainer()
 
 class ContractController {
   async saveOneContract (req: Request, res: Response, next: NextFunction) {
@@ -39,7 +39,7 @@ class ContractController {
       }
       return res.status(201).send(result)
     } catch (error) {
-      return errorHandler.returnError(error, req, res, next)
+      return errorHandlerMiddleware.returnError(error, req, res, next)
     }
   }
 
@@ -65,7 +65,7 @@ class ContractController {
       }
       return res.status(201).send(result)
     } catch (error) {
-      return errorHandler.returnError(error, req, res, next)
+      return errorHandlerMiddleware.returnError(error, req, res, next)
     }
   }
 
@@ -82,7 +82,7 @@ class ContractController {
       }
       return res.status(200).send(result)
     } catch (error) {
-      return errorHandler.returnError(error, req, res, next)
+      return errorHandlerMiddleware.returnError(error, req, res, next)
     }
   }
 
@@ -99,7 +99,7 @@ class ContractController {
       }
       return res.status(200).send(result)
     } catch (error) {
-      return errorHandler.returnError(error, req, res, next)
+      return errorHandlerMiddleware.returnError(error, req, res, next)
     }
   }
 
@@ -117,7 +117,7 @@ class ContractController {
       const result = await deeleteContractUseCase.execute(Number(req.params.id), data.partnerId)
       return res.status(204).send(result)
     } catch (error) {
-      return errorHandler.returnError(error, req, res, next)
+      return errorHandlerMiddleware.returnError(error, req, res, next)
     }
   }
 }

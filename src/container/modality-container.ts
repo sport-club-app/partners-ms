@@ -3,12 +3,11 @@ import {
   DeleteModality,
   GetAllmodality,
   GetModality,
-  GetModalityList,
   SaveModality,
   UpdateModality
 } from "@Core/use-cases/modality"
 
-export const modalityFactory = () => {
+export const modalityContainer = () => {
   const modalityRepository = new ModalityRepositoryDb()
   const getAllModalityUseCase = new GetAllmodality(modalityRepository)
   const getModalityUseCase = new GetModality(modalityRepository)

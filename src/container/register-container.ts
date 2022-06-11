@@ -7,12 +7,13 @@ import { ContactRepositoryDb } from "@Repository/ContactRepositoryDb"
 import { ContractRepositoryDb } from "@Repository/ContractRepositoryDb"
 import { ProducerNotification } from "@Core/use-cases/notification/ProducerNotification"
 import { kafka } from "@Infra/services/kafka/config"
+import { SavePartnersDTOResponse } from "@DTO/register-dto"
 import {
   SavePartner,
   GetFullRegisterDataPartner
 } from "@Core/use-cases/partner"
 
-export const registerFactory = () => {
+export const registerContainer = () => {
   const partnerRepository = new PartnerRepositoryDb()
   const savePartnerUseCase = new SavePartner(partnerRepository)
   const getFullRegisterDataPartner = new GetFullRegisterDataPartner(partnerRepository)
@@ -30,6 +31,8 @@ export const registerFactory = () => {
 
   const producerNotification = new ProducerNotification(kafka)
 
+  const savePartnersDTOResponse = new SavePartnersDTOResponse()
+
   return {
     savePartnerUseCase,
     getFullRegisterDataPartner,
@@ -38,6 +41,7 @@ export const registerFactory = () => {
     saveModalityUseCase,
     getModalityUseCase,
     saveContractUseCase,
-    producerNotification
+    producerNotification,
+    savePartnersDTOResponse
   }
 }

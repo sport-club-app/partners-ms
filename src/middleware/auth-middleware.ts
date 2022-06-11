@@ -1,6 +1,6 @@
 
 import { NextFunction, Request, Response } from "express"
-import { errorHandler } from "src/exceptions/error-handler"
+import { errorHandlerMiddleware } from "@Middleware/error-handler"
 import { APIError } from "src/exceptions/base-error"
 import { HttpStatusCode } from "src/exceptions/interfaces"
 import businessError from "src/exceptions/business-error"
@@ -27,7 +27,7 @@ class AuthMiddleware {
       }
       next("route")
     } catch (error) {
-      return errorHandler.returnError(error, req, res, next)
+      return errorHandlerMiddleware.returnError(error, req, res, next)
     }
   }
 }

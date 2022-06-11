@@ -1,9 +1,8 @@
 import "dotenv/config"
 import { NextFunction, Request, Response } from "express"
 import { fieldValidated } from "@Validators/registerValidator"
-import { resultSavePartner } from "@Utils/deliveryFormatData/partner"
-import { registerFactory } from "@Factory/registerFactory"
-import { errorHandler } from "../exceptions/error-handler"
+import { registerContainer } from "@Container/register-container"
+import { errorHandlerMiddleware } from "../middleware/error-handler"
 import { APIError } from "../exceptions/base-error"
 import { HttpStatusCode } from "../exceptions/interfaces"
 import businessError from "../exceptions/business-error"
@@ -16,8 +15,9 @@ const {
   saveContactUseCase,
   saveContractUseCase,
   saveModalityUseCase,
-  savePartnerUseCase
-} = registerFactory()
+  savePartnerUseCase,
+  savePartnersDTOResponse
+} = registerContainer()
 class RegisterController {
   async saveRegister (req: Request, res: Response, next: NextFunction) {
     try {
@@ -54,10 +54,10 @@ class RegisterController {
       const partner = await savePartnerUseCase.execute(dataPartner)
       const contract = await saveContractUseCase.execute(dataModalities, partner.id)
 
-      const resultformatData = resultSavePartner(partner, contract)
+      const resultformatData = savePartnersDTOResponse.execute(partner, contract)
       return res.status(201).send(resultformatData)
     } catch (error) {
-      return errorHandler.returnError(error, req, res, next)
+      return errorHandlerMiddleware.returnError(error, req, res, next)
     }
   }
 
@@ -77,7 +77,7 @@ class RegisterController {
       }
       return res.status(200).send(result)
     } catch (error) {
-      return errorHandler.returnError(error, req, res, next)
+      return errorHandlerMiddleware.returnError(error, req, res, next)
     }
   }
 }

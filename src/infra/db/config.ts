@@ -1,5 +1,5 @@
 import "reflect-metadata"
-import { createConnection, getManager } from "typeorm"
+import { DataSource } from "typeorm"
 import { ModalityModel } from "../models/ModalityModel"
 import { PartnerModel } from "../models/PartnerModel"
 import { ContractModel } from "../models/ContractModel"
@@ -7,8 +7,11 @@ import { ContactModel } from "../models/ContactModel"
 import { runFactory } from "./factorys"
 import "dotenv/config"
 import { BgRed, FgGreen } from "../../../console.color"
+import { sleep } from "@Utils/sleep"
 
-export const getConfig = createConnection({
+declare type LoggerOptions = boolean | "all" | Array<("query" | "schema" | "error" | "warn" | "info" | "log" | "migration")>;
+
+export const connection = new DataSource({
   type: process.env.DB_ENGINE,
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
@@ -22,21 +25,26 @@ export const getConfig = createConnection({
     ContractModel
   ],
   synchronize: true,
-  logging: process.env.NODE_ENV === "development",
+  logging: process.env.DB_LOGGING as LoggerOptions,
   timezone: process.env.TIMEZONE,
   connectTimeout: 20000
-  // acquireTimeout: 20000
-}).then(connection => {
-  if (process.env.NODE_ENV === "test") {
-    connection.close()
-    return
-  }
-  runFactory(connection)
-  console.log(FgGreen, "BANCO DE TESTE CRIADO COM SUCESSO!")
-}).catch((error) => {
-  if (process.env.NODE_ENV === "development") {
-    console.log(BgRed, error)
-  }
 })
 
-export const entityManager = getManager()
+export const migrateDatabase = async (connection: DataSource) => {
+  await sleep(400)
+  const migrations = await connection.runMigrations()
+  await sleep(400)
+  return migrations
+}
+
+connection.initialize().then(async (conn) => {
+  await Promise.all([
+    await migrateDatabase(conn),
+    await runFactory(conn)
+  ])
+  console.log(FgGreen, conn)
+}).catch((error) => {
+  console.log(BgRed, error)
+})
+
+export const entityManager = connection.manager

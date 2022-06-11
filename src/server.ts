@@ -1,13 +1,13 @@
 
 import "dotenv/config"
-import express, { NextFunction, Request, Response } from "express"
+import express from "express"
 import cors from "cors"
 import { router } from "./routes"
 import swaggerUi from "swagger-ui-express"
 import swaggerDocument from "../src/docs/swagger.json"
 import { getVersionApi } from "@Utils/getVersion"
 import { keycloak } from "@Infra/services/keycloak/config"
-import { errorHandler } from "src/exceptions/error-handler"
+import { errorHandlerMiddleware } from "@Middleware/error-handler"
 import { authMiddleware } from "src/middleware/auth-middleware"
 
 const version = getVersionApi()
@@ -27,8 +27,8 @@ process.on("unhandledRejection", (reason, promise) => {
   process.exit(1)
 })
 
-server.use(errorHandler.logErrorMiddleware)
-server.use(errorHandler.returnError)
+server.use(errorHandlerMiddleware.logErrorMiddleware)
+server.use(errorHandlerMiddleware.returnError)
 server.use(authMiddleware.execute)
 
 server.use(keycloak.middleware({

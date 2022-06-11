@@ -8,7 +8,7 @@ export enum HttpStatusCode {
     UNPROCESSABLE_ENTITY = 422
 }
 
-export interface IErrorHandlerMethods{
+export interface IErrorHandlerMiddlewareMethods{
     logError(err: any): Promise<void>
     logErrorMiddleware(error: any, req: Request, res: Response, next: NextFunction): Promise<void>
     returnError(error: any, req: Request, res: Response, next: NextFunction): Promise<Response<any>>

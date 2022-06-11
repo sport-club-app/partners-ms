@@ -7,7 +7,7 @@ import {
 } from "@Core/use-cases/partner"
 import { PartnerRepositoryDb } from "@Repository/PartnerRepositoryDb"
 
-export const partnerFactory = () => {
+export const partnerContainer = () => {
   const partnerRepository = new PartnerRepositoryDb()
   const savePartnerUseCase = new SavePartner(partnerRepository)
   const updatePartnerPartnerUseCase = new UpdatePartner(partnerRepository)

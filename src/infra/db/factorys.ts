@@ -1,5 +1,5 @@
 import { Modality } from "@Core/entity"
-import { Connection } from "typeorm"
+import { DataSource } from "typeorm"
 import { ModalityModel } from "../models/ModalityModel"
 
 export const modalityFactory: Modality[] =
@@ -12,16 +12,16 @@ export const modalityFactory: Modality[] =
 
     ]
 
-export async function runFactory (connection: Connection) {
+export async function runFactory (connection: DataSource) {
   async function deleteTable () {
-    // await connection.query(`DELETE FROM partner`)
-    // await connection.query(`ALTER TABLE partner AUTO_INCREMENT = 1`)
-    // await connection.query(`DELETE FROM modality`)
-    // await connection.query(`ALTER TABLE modality AUTO_INCREMENT = 1`)
-    // await connection.query(`DELETE FROM contact`)
-    // await connection.query(`ALTER TABLE contact AUTO_INCREMENT = 1`)
-    // await connection.query(`DELETE FROM contract`)
-    // await connection.query(`ALTER TABLE contract AUTO_INCREMENT = 1`)
+    await connection.query(`DELETE FROM partner_model`)
+    await connection.query(`ALTER TABLE partner_model AUTO_INCREMENT = 1`)
+    await connection.query(`DELETE FROM modality_model`)
+    await connection.query(`ALTER TABLE modality_model AUTO_INCREMENT = 1`)
+    await connection.query(`DELETE FROM contact_model`)
+    await connection.query(`ALTER TABLE contact_model AUTO_INCREMENT = 1`)
+    await connection.query(`DELETE FROM contract_model`)
+    await connection.query(`ALTER TABLE contract_model AUTO_INCREMENT = 1`)
   }
 
   async function insertData () {
@@ -35,8 +35,7 @@ export async function runFactory (connection: Connection) {
   const execute = async () => {
     await Promise.all([
       await deleteTable(),
-      await insertData(),
-      await connection.close()
+      await insertData()
     ])
   }
 

@@ -21,7 +21,7 @@ export class ContactRepositoryDb implements IContactRepositoryDbMethods {
   }
 
   async findOne (id: number) {
-    return await entityManager.findOne(ContactModel, id)
+    return await entityManager.findOne(ContactModel, { where: { id: id } })
   }
 
   async findEmail (contacts: ContactModel[]) {

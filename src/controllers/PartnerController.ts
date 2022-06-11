@@ -2,8 +2,8 @@ import "dotenv/config"
 import { NextFunction, Request, Response } from "express"
 import { fieldValidated } from "@Validators/partnerValidation"
 import { Partner } from "@Core/entity"
-import { partnerFactory } from "@Factory/partnerFactory"
-import { errorHandler } from "../exceptions/error-handler"
+import { partnerContainer } from "@Container/partner-container"
+import { errorHandlerMiddleware } from "../middleware/error-handler"
 import { APIError } from "../exceptions/base-error"
 import { HttpStatusCode } from "../exceptions/interfaces"
 import businessError from "../exceptions/business-error"
@@ -13,7 +13,7 @@ const {
   getPartnerPartnerUseCase,
   savePartnerUseCase,
   updatePartnerPartnerUseCase
-} = partnerFactory()
+} = partnerContainer()
 class PartnerController {
   async savePartner (req: Request, res: Response, next: NextFunction) {
     const data: Partner = req.body
@@ -30,7 +30,7 @@ class PartnerController {
       const result = await savePartnerUseCase.execute(data)
       return res.status(201).send(result)
     } catch (error) {
-      return errorHandler.returnError(error, req, res, next)
+      return errorHandlerMiddleware.returnError(error, req, res, next)
     }
   }
 
@@ -47,7 +47,7 @@ class PartnerController {
         )
       }
     } catch (error) {
-      return errorHandler.returnError(error, req, res, next)
+      return errorHandlerMiddleware.returnError(error, req, res, next)
     }
   }
 
@@ -64,7 +64,7 @@ class PartnerController {
       }
       return res.status(200).send(result)
     } catch (error) {
-      return errorHandler.returnError(error, req, res, next)
+      return errorHandlerMiddleware.returnError(error, req, res, next)
     }
   }
 
@@ -81,7 +81,7 @@ class PartnerController {
       }
       return res.status(200).send(result)
     } catch (error) {
-      return errorHandler.returnError(error, req, res, next)
+      return errorHandlerMiddleware.returnError(error, req, res, next)
     }
   }
 
@@ -98,7 +98,7 @@ class PartnerController {
       }
       return res.status(200).send(result)
     } catch (error) {
-      return errorHandler.returnError(error, req, res, next)
+      return errorHandlerMiddleware.returnError(error, req, res, next)
     }
   }
 }

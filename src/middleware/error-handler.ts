@@ -1,12 +1,12 @@
 import { logger } from "@Infra/logger/config"
 import { Response, Request, NextFunction } from "express"
-import { BaseError } from "./base-error"
-import businessError from "./business-error"
-import { IErrorHandlerMethods } from "./interfaces"
+import { BaseError } from "../exceptions/base-error"
+import businessError from "../exceptions/business-error"
+import { IErrorHandlerMiddlewareMethods } from "../exceptions/interfaces"
 
 // free to extend the BaseError
 
-class ErrorHandler implements IErrorHandlerMethods {
+class ErrorHandlerMiddleware implements IErrorHandlerMiddlewareMethods {
   public async logError (err: any) {
     await logger.error(
       "Error message from the centralized error-handling component",
@@ -33,4 +33,4 @@ class ErrorHandler implements IErrorHandlerMethods {
     return false
   }
 }
-export const errorHandler = new ErrorHandler()
+export const errorHandlerMiddleware = new ErrorHandlerMiddleware()

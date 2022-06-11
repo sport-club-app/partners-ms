@@ -9,7 +9,7 @@ import {
 import { ProducerNotification } from "@Core/use-cases/notification/ProducerNotification"
 import { kafka } from "@Infra/services/kafka/config"
 
-export const contactFactory = () => {
+export const contactContainer = () => {
   const contactRepository = new ContactRepositoryDb()
   const saveContactUseCase = new SaveOneContact(contactRepository)
   const updateContactUseCase = new UpdateOneContact(contactRepository)

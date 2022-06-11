@@ -40,9 +40,15 @@
       "@Core/*": [
         "./src/core/*"
       ],
-      "@Factory/*": [
-        "./src/factory/*"
-      ]
+      "@Container/*": [
+        "src/container/*"
+      ],
+      "@DTO/*": [
+        "./src/dto/*"
+      ],
+      "@Middleware/*": [
+        "./src/middleware/*"
+      ],
     }
   },
   "exclude": [

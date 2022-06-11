@@ -1,7 +1,7 @@
 import { UpdateContractStatus, SaveOneContract, GetContract, GetAllContracts, DeleteContract } from "@Core/use-cases/contract"
 import { ContractRepositoryDb } from "@Repository/ContractRepositoryDb"
 
-export const contractFactory = () => {
+export const contractContainer = () => {
   const contractRepositoryDb = new ContractRepositoryDb()
   const updateContractStatusUseCase = new UpdateContractStatus(contractRepositoryDb)
   const saveOneContractUseCase = new SaveOneContract(contractRepositoryDb)
