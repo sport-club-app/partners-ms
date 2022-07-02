@@ -16,38 +16,8 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "paths": {
-      "@UseCases/*": [
-        "src/core/use-cases/*"
-      ],
-      "@Entity/*": [
-        "src/core/entity/*"
-      ],
-      "@Validators/*": [
-        "./src/validators/*"
-      ],
-      "@Controllers/*": [
-        "./src/controllers/*"
-      ],
-      "@Repository/*": [
-        "./src/repository/*"
-      ],
-      "@Infra/*": [
-        "./src/infra/*"
-      ],
-      "@Utils/*": [
-        "./src/utils/*"
-      ],
-      "@Core/*": [
-        "./src/core/*"
-      ],
-      "@Container/*": [
-        "src/container/*"
-      ],
-      "@DTO/*": [
-        "./src/dto/*"
-      ],
-      "@Middleware/*": [
-        "./src/middleware/*"
+      "@/*": [
+        "src/*"
       ],
     }
   },

@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { fieldValidated } from "../../../src/validators/registerValidator"
-import RegisterController from "../../../src/controllers/RegisterController"
+import RegisterController from "../../../src/app/controllers/RegisterController"
 import { APIError } from "../../../src/exceptions/base-error"
 import businessError from "../../../src/exceptions/business-error"
 import { HttpStatusCode } from "../../../src/exceptions/interfaces"

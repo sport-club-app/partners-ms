@@ -1,4 +1,4 @@
-import { Modality } from "@Core/entity"
+import { Modality } from "@/app/core/entity"
 import { DataSource } from "typeorm"
 import { ModalityModel } from "../models/ModalityModel"
 

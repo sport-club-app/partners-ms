@@ -1,4 +1,4 @@
-import { Contract, Partner, Modality } from "../../../src/core/entity"
+import { Contract, Partner, Modality } from "../../../src/app/core/entity"
 import { AxiosResponse } from "axios"
 import { api } from "../utils/api"
 

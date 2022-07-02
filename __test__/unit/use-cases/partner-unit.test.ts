@@ -1,10 +1,10 @@
 // @ts-nocheck
-import { PartnerRepositoryMemory } from "../../../src/repository/PartnerRepositorymemory"
-import { Partner } from "../../../src/core/entity/Partner"
-import PartnerController from "../../../src/controllers/PartnerController"
-import { APIError } from "../../../src/exceptions/base-error"
-import businessError from "../../../src/exceptions/business-error"
-import { HttpStatusCode } from "../../../src/exceptions/interfaces"
+import { PartnerRepositoryMemory } from "../../../src/app/repository/PartnerRepositorymemory"
+import { Partner } from "../../../src/app/core/entity/Partner"
+import PartnerController from "../../../src/app/controllers/PartnerController"
+import { APIError } from "../../../src/app/exceptions/base-error"
+import businessError from "../../../src/app/exceptions/business-error"
+import { HttpStatusCode } from "../../../src/app/exceptions/interfaces"
 
 const dataValidated: Partner = {
   id: 123,

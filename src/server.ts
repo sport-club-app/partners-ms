@@ -4,11 +4,12 @@ import express from "express"
 import cors from "cors"
 import { router } from "./routes"
 import swaggerUi from "swagger-ui-express"
-import swaggerDocument from "../src/docs/swagger.json"
-import { getVersionApi } from "@Utils/getVersion"
-import { keycloak } from "@Infra/services/keycloak/config"
-import { errorHandlerMiddleware } from "@Middleware/error-handler"
-import { authMiddleware } from "src/middleware/auth-middleware"
+import swaggerDocument from "@/docs/swagger.json"
+import { getVersionApi } from "@/app/utils/getVersion"
+import { keycloak } from "@/infra/services/keycloak/config"
+import { errorHandlerMiddleware } from "@/app/middleware/error-handler"
+import { authMiddleware } from "@/app/middleware/auth-middleware"
+import { getNewRefreshToken } from "@/app/middleware/get-refresh-token"
 
 const version = getVersionApi()
 
@@ -30,6 +31,7 @@ process.on("unhandledRejection", (reason, promise) => {
 server.use(errorHandlerMiddleware.logErrorMiddleware)
 server.use(errorHandlerMiddleware.returnError)
 server.use(authMiddleware.execute)
+server.use(getNewRefreshToken.execute)
 
 server.use(keycloak.middleware({
   logout: "/logout",

@@ -7,7 +7,7 @@ import { ContactModel } from "../models/ContactModel"
 import { runFactory } from "./factorys"
 import "dotenv/config"
 import { BgRed, FgGreen } from "../../../console.color"
-import { sleep } from "@Utils/sleep"
+import { sleep } from "@/app/utils/sleep"
 
 declare type LoggerOptions = boolean | "all" | Array<("query" | "schema" | "error" | "warn" | "info" | "log" | "migration")>;
 
@@ -42,7 +42,7 @@ connection.initialize().then(async (conn) => {
     await migrateDatabase(conn),
     await runFactory(conn)
   ])
-  console.log(FgGreen, conn)
+  // console.log(FgGreen, conn)
 }).catch((error) => {
   console.log(BgRed, error)
 })

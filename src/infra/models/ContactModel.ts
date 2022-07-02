@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn } from "typeorm"
-import { Contact } from "@Core/entity"
+import { Contact } from "@/app/core/entity"
 import { PartnerModel } from "./PartnerModel"
 
 @Entity()

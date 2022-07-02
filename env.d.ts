@@ -22,6 +22,7 @@ declare global {
         DB_REDIS_PASSWORD: string
         DB_LOGGING: boolean | "all" | Array<("query" | "schema" | "error" | "warn" | "info" | "log" | "migration")>
         TIMEZONE: string
+        MANAGER_URL: string
       }
     }
   }

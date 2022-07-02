@@ -1,10 +1,10 @@
 // @ts-nocheck
-import { ModalityRepositoryMemory } from "../../../src/repository/ModalityRepositoryMemory"
-import { Modality } from "../../../src/core/entity/Modality"
-import ModalityController from "../../../src/controllers/ModalityController"
-import { APIError } from "../../../src/exceptions/base-error"
-import businessError from "../../../src/exceptions/business-error"
-import { HttpStatusCode } from "../../../src/exceptions/interfaces"
+import { ModalityRepositoryMemory } from "../../../src/app/repository/ModalityRepositoryMemory"
+import { Modality } from "../../../src/app/core/entity/Modality"
+import ModalityController from "../../../src/app/controllers/ModalityController"
+import { APIError } from "../../../src/app/exceptions/base-error"
+import businessError from "../../../src/app/exceptions/business-error"
+import { HttpStatusCode } from "../../../src/app/exceptions/interfaces"
 
 const dataValidated: Modality = {
   id: 123,

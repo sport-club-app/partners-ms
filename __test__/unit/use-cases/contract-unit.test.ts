@@ -1,6 +1,6 @@
-import { ContractRepositoryMemory } from "../../../src/repository/ContractRepositoryMemory"
-import { Contract } from "../../../src/core/entity/Contract"
-import { fieldValidated } from "../../../src/validators/modalityValidator"
+import { ContractRepositoryMemory } from "../../../src/app/repository/ContractRepositoryMemory"
+import { Contract } from "../../../src/app/core/entity/Contract"
+import { fieldValidated } from "../../../src/app/validators/modalityValidator"
 
 const dataValidated: Contract = {
   id: 1,

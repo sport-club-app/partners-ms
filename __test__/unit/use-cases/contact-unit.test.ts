@@ -1,5 +1,5 @@
-import { ContactMemory } from "../../../src/repository/ContactRepositoryMemory"
-import { Contact } from "../../../src/core/entity/Contact"
+import { ContactMemory } from "../../../src/app/repository/ContactRepositoryMemory"
+import { Contact } from "../../../src/app/core/entity/Contact"
 
 const dataValidated: Contact = {
   id: 123,

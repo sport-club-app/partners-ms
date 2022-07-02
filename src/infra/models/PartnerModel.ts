@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable, OneToMany, CreateDateColumn, UpdateDateColumn } from "typeorm"
-import { Partner } from "@Core/entity"
+import { Partner } from "@/app/core/entity"
 import { ModalityModel } from "./ModalityModel"
 import { ContactModel } from "./ContactModel"
 import { ContractModel } from "./ContractModel"

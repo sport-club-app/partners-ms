@@ -8,15 +8,7 @@ module.exports = {
   plugins: [
     ["module-resolver", {
       alias: {
-        "@UseCases": "./src/use-cases",
-        "@Entity": "./src/entity",
-        "@Validators": "./src/validators",
-        "@Controllers": "./src/controllers",
-        "@Repository": "./src/repository",
-        "@Infra": "./src/infra",
-        "@Utils": "./src/utils",
-        "@Core": "./src/core",
-        "@Factory": "./src/factory"
+        "@": "./src/"
       }
     }],
     ["@babel/plugin-proposal-decorators", { legacy: true }

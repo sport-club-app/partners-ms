@@ -1,4 +1,4 @@
-import { Partner } from "../../../src/core/entity"
+import { Partner } from "../../../src/app/core/entity"
 import { AxiosResponse } from "axios"
 import { api } from "../utils/api"
 
