@@ -13,7 +13,7 @@ import {
   GetFullRegisterDataPartner
 } from "@/app/core/use-cases/partner"
 
-export const registerContainer = () => {
+export const registerFactory = () => {
   const partnerRepository = new PartnerRepositoryDb()
   const savePartnerUseCase = new SavePartner(partnerRepository)
   const getFullRegisterDataPartner = new GetFullRegisterDataPartner(partnerRepository)

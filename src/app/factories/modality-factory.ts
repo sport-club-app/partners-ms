@@ -7,7 +7,7 @@ import {
   UpdateModality
 } from "@/app/core/use-cases/modality"
 
-export const modalityContainer = () => {
+export const modalityFactory = () => {
   const modalityRepository = new ModalityRepositoryDb()
   const getAllModalityUseCase = new GetAllmodality(modalityRepository)
   const getModalityUseCase = new GetModality(modalityRepository)

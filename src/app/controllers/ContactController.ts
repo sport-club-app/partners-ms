@@ -1,7 +1,7 @@
 import "dotenv/config"
 import { NextFunction, Request, Response } from "express"
 import { fieldValidated } from "@/app/validators/contactValidator"
-import { contactContainer } from "@/app/factories/contact-container"
+import { contactFactory } from "@/app/factories/contact-factory"
 import { Contact } from "@/app/core/entity"
 import { errorHandlerMiddleware } from "@/app/middleware/error-handler"
 import { APIError } from "@/app/exceptions/base-error"
@@ -15,7 +15,7 @@ const {
   producerNotification,
   saveContactUseCase,
   updateContactUseCase
-} = contactContainer()
+} = contactFactory()
 
 class ContractController {
   async saveOneContact (req: Request, res: Response, next: NextFunction) {

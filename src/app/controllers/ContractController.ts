@@ -6,14 +6,14 @@ import { errorHandlerMiddleware } from "@/app/middleware/error-handler"
 import { APIError } from "@/app/exceptions/base-error"
 import { HttpStatusCode } from "@/app/exceptions/interfaces"
 import businessError from "@/app/exceptions/business-error"
-import { contractContainer } from "@/app/factories/contract-container"
+import { contractFactory } from "@/app/factories/contract-factory"
 const {
   deeleteContractUseCase,
   getAllContractUseCase,
   getContractUseCase,
   saveOneContractUseCase,
   updateContractStatusUseCase
-} = contractContainer()
+} = contractFactory()
 
 class ContractController {
   async saveOneContract (req: Request, res: Response, next: NextFunction) {
@@ -50,7 +50,7 @@ class ContractController {
         throw new APIError("NOT_FOUND",
           HttpStatusCode.NOT_FOUND,
           true,
-          businessError.PARTNER_NOT_FOUND,
+          businessError.CONTRACT_NOT_FOUND,
           undefined
         )
       }
@@ -70,8 +70,17 @@ class ContractController {
   }
 
   async getContract (req: Request, res: Response, next: NextFunction) {
+    const id = req.params.id
     try {
-      const result = await getContractUseCase.execute(Number(req.params.id))
+      if (!id) {
+        throw new APIError("BAD_REQUEST",
+          HttpStatusCode.BAD_REQUEST,
+          true,
+          businessError.GENERIC,
+          undefined
+        )
+      }
+      const result = await getContractUseCase.execute(Number(id))
       if (!result) {
         throw new APIError("NOT_FOUND",
           HttpStatusCode.NOT_FOUND,
@@ -88,6 +97,14 @@ class ContractController {
 
   async getAllContracts (req: Request, res: Response, next: NextFunction) {
     try {
+      if (!req.headers?.authorization) {
+        throw new APIError("BAD_REQUEST",
+          HttpStatusCode.BAD_REQUEST,
+          true,
+          businessError.GENERIC,
+          undefined
+        )
+      }
       const result = await getAllContractUseCase.execute()
       if (!result) {
         throw new APIError("NOT_FOUND",
@@ -110,7 +127,7 @@ class ContractController {
         throw new APIError("NOT_FOUND",
           HttpStatusCode.NOT_FOUND,
           true,
-          businessError.PARTNER_NOT_FOUND,
+          businessError.CONTRACT_NOT_FOUND,
           undefined
         )
       }

@@ -7,7 +7,7 @@ export class SaveContact {
       this.contactRepository = contactRepository
     }
 
-    async execute (contact: Contact[]) {
+    async execute (contact: Contact) {
       return this.contactRepository.create(contact)
     }
 }

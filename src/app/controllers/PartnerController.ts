@@ -2,7 +2,7 @@ import "dotenv/config"
 import { NextFunction, Request, Response } from "express"
 import { fieldValidated } from "@/app/validators/partnerValidation"
 import { Partner } from "@/app/core/entity"
-import { partnerContainer } from "@/app/factories/partner-container"
+import { partnerFactory } from "@/app/factories/partner-factory"
 import { errorHandlerMiddleware } from "@/app/middleware/error-handler"
 import { APIError } from "@/app/exceptions/base-error"
 import { HttpStatusCode } from "@/app/exceptions/interfaces"
@@ -13,7 +13,7 @@ const {
   getPartnerPartnerUseCase,
   savePartnerUseCase,
   updatePartnerPartnerUseCase
-} = partnerContainer()
+} = partnerFactory()
 class PartnerController {
   async savePartner (req: Request, res: Response, next: NextFunction) {
     const data: Partner = req.body
@@ -36,8 +36,17 @@ class PartnerController {
 
   async updatePartner (req: Request, res: Response, next: NextFunction) {
     const data: Partner = req.body
+    const id = req.params.id
     try {
-      const result = await updatePartnerPartnerUseCase.execute(Number(req.params.id), data)
+      if (!id || !data) {
+        throw new APIError("NOT_FOUND",
+          HttpStatusCode.NOT_FOUND,
+          true,
+          businessError.PARTNER_NOT_FOUND,
+          undefined
+        )
+      }
+      const result = await updatePartnerPartnerUseCase.execute(Number(id), data)
       if (result.affected == 0) {
         throw new APIError("NOT_FOUND",
           HttpStatusCode.NOT_FOUND,
@@ -52,8 +61,17 @@ class PartnerController {
   }
 
   async getPartner (req: Request, res: Response, next: NextFunction) {
+    const id = req.params.id
     try {
-      const result = await getPartnerPartnerUseCase.execute(Number(req.params.id))
+      if (!id) {
+        throw new APIError("BAD_REQUEST",
+          HttpStatusCode.BAD_REQUEST,
+          true,
+          businessError.GENERIC,
+          undefined
+        )
+      }
+      const result = await getPartnerPartnerUseCase.execute(Number(id))
       if (!result) {
         throw new APIError("NOT_FOUND",
           HttpStatusCode.NOT_FOUND,
@@ -70,6 +88,14 @@ class PartnerController {
 
   async getAllPartners (req: Request, res: Response, next: NextFunction) {
     try {
+      if (!req.headers?.authorization) {
+        throw new APIError("BAD_REQUEST",
+          HttpStatusCode.BAD_REQUEST,
+          true,
+          businessError.GENERIC,
+          undefined
+        )
+      }
       const result = await getAllPartnerPartnerUseCase.execute()
       if (!result) {
         throw new APIError("NOT_FOUND",
@@ -86,8 +112,17 @@ class PartnerController {
   }
 
   async deletePartner (req: Request, res: Response, next: NextFunction) {
+    const id = req.params.id
     try {
-      const result = await deletePartnerPartnerUseCase.execute(Number(req.params.id))
+      if (!id) {
+        throw new APIError("NOT_FOUND",
+          HttpStatusCode.NOT_FOUND,
+          true,
+          businessError.MODALITY_NOT_FOUND,
+          undefined
+        )
+      }
+      const result = await deletePartnerPartnerUseCase.execute(Number(id))
       if (!result) {
         throw new APIError("NOT_FOUND",
           HttpStatusCode.NOT_FOUND,

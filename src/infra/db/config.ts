@@ -42,9 +42,13 @@ connection.initialize().then(async (conn) => {
     await migrateDatabase(conn),
     await runFactory(conn)
   ])
-  // console.log(FgGreen, conn)
+  if (process.env.NODE_ENV === "development") {
+    console.log(FgGreen, conn)
+  }
 }).catch((error) => {
-  console.log(BgRed, error)
+  if (process.env.NODE_ENV === "development") {
+    console.log(BgRed, error)
+  }
 })
 
 export const entityManager = connection.manager

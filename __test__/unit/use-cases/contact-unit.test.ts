@@ -1,5 +1,14 @@
-import { ContactMemory } from "../../../src/app/repository/ContactRepositoryMemory"
-import { Contact } from "../../../src/app/core/entity/Contact"
+import { ContactMemory } from "@/app/repository/ContactRepositoryMemory"
+import { Contact } from "@/app/core/entity/Contact"
+import {
+  SaveOneContact,
+  DeleteContact,
+  GetAllContacts,
+  GetContact,
+  GetEmailContact,
+  SaveContact,
+  UpdateOneContact
+} from "@/app/core/use-cases/contact/"
 
 const dataValidated: Contact = {
   id: 123,
@@ -10,6 +19,13 @@ const dataValidated: Contact = {
 }
 
 const repository = new ContactMemory()
+const saveOneContact = new SaveOneContact(repository)
+const deleteContact = new DeleteContact(repository)
+const getAllContacts = new GetAllContacts(repository)
+const getContact = new GetContact(repository)
+const updateOneContact = new UpdateOneContact(repository)
+const getEmailContact = new GetEmailContact(repository)
+const saveContact = new SaveContact(repository)
 
 describe("Testes unitários de informacões de contato", () => {
   beforeAll(async () => {
@@ -43,7 +59,7 @@ describe("Testes unitários de informacões de contato", () => {
       phone: 9999334455,
       partnerId: 2
     }
-    const result = await repository.save(data)
+    const result = await saveOneContact.execute(data)
     expect(result).not.toEqual(dataValidated)
   })
 
@@ -54,7 +70,7 @@ describe("Testes unitários de informacões de contato", () => {
       phone: 9999334455,
       partnerId: 2
     }
-    const result = await repository.save(data)
+    const result = await saveOneContact.execute(data)
     expect(result).not.toEqual(dataValidated)
   })
 
@@ -65,7 +81,7 @@ describe("Testes unitários de informacões de contato", () => {
       phone: null,
       partnerId: 2
     }
-    const result = await repository.save(data)
+    const result = await saveOneContact.execute(data)
     expect(result).not.toEqual(dataValidated)
   })
 
@@ -76,7 +92,7 @@ describe("Testes unitários de informacões de contato", () => {
       phone: 9999334455,
       partnerId: null
     }
-    const result = await repository.save(data)
+    const result = await saveOneContact.execute(data)
     expect(result).not.toEqual(dataValidated)
   })
 
@@ -87,44 +103,55 @@ describe("Testes unitários de informacões de contato", () => {
       phone: 9999334455,
       partnerId: 2
     }
-    const result = await repository.updateContact(123, null, data)
+    const result = await updateOneContact.execute(123, null, data)
     expect(result).not.toEqual(dataValidated)
   })
 
   it("Deve salvar um registro caso todos dados obrigátorios sejam passados", async () => {
-    const result = await repository.save(dataValidated)
+    const result = await saveOneContact.execute(dataValidated)
     expect(result).toEqual(dataValidated)
   })
 
+  it("Não Deve listar emails caso o payload seja omitido", async () => {
+    await getEmailContact.execute(null)
+    const t = () => {
+      throw new TypeError()
+    }
+    expect(t).toThrow(TypeError)
+  })
+
   it("Deve salvar um registro caso todos dados obrigátorios sejam passados", async () => {
-    const result = await repository.saveOneContact(dataValidated)
-    expect(result).not.toEqual(dataValidated)
+    const result = await saveContact.execute(dataValidated)
+    expect(result).toEqual(dataValidated)
   })
 
   it("Não Deve listar informação de contato do sócio caso o id seja omitido", async () => {
-    const result: any = await repository.findOne(null)
-    const status = result.status
-    expect(status).toBe(400)
+    const result = await getContact.execute(null)
+    expect(result).toBe(undefined)
   })
 
   it("Não Deve deletar informação de contato do sócio caso o id seja omitido", async () => {
-    const result: any = await repository.delete(null)
-    const status = result.status
-    expect(status).toBe(400)
+    const result = await deleteContact.execute(null)
+    expect(result.affected).toBe(undefined)
   })
 
   it("Deve listar todos registros de sócios", async () => {
-    const result = await repository.findAll()
+    const result = await getAllContacts.execute()
     expect(result).not.toHaveLength(0)
   })
 
   it("Deve listar informação de contato do sócio caso seja passado um id", async () => {
-    const result = await repository.findOne(dataValidated.id)
+    const result = await getContact.execute(dataValidated.id)
     expect(result).toEqual(dataValidated)
   })
 
   it("Deve deletar informação de contato de sócio caso seja passado um id", async () => {
-    const result = await repository.delete(dataValidated.id)
-    expect(result).toHaveLength(0)
+    const result = await deleteContact.execute(dataValidated.id)
+    expect(result.affected).toBe(undefined)
+  })
+
+  it("Deve listar emails caso o payload seja passado", async () => {
+    const result = await getEmailContact.execute(null)
+    expect(result).toBe(result)
   })
 })

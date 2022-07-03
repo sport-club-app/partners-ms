@@ -1,7 +1,7 @@
 import "dotenv/config"
 import { NextFunction, Request, Response } from "express"
 import { fieldValidated } from "@/app/validators/registerValidator"
-import { registerContainer } from "@/app/factories/register-container"
+import { registerFactory } from "@/app/factories/register-factory"
 import { errorHandlerMiddleware } from "@/app/middleware/error-handler"
 import { APIError } from "@/app/exceptions/base-error"
 import { HttpStatusCode } from "@/app/exceptions/interfaces"
@@ -17,7 +17,7 @@ const {
   saveModalityUseCase,
   savePartnerUseCase,
   savePartnersDTOResponse
-} = registerContainer()
+} = registerFactory()
 class RegisterController {
   async saveRegister (req: Request, res: Response, next: NextFunction) {
     try {

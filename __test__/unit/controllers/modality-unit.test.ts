@@ -1,24 +1,18 @@
-import ContactController from "@/app/controllers/ContactController"
+import ModalityController from "@/app/controllers/ModalityController"
 import businessError from "@/app/exceptions/business-error"
 import { HttpStatusCode } from "@/app/exceptions/interfaces"
 import { APIError } from "@/app/exceptions/base-error"
-import { contactTranslate } from "@/app/validators/contactTranslate"
 
-describe("Testes unitário ContactController", () => {
+describe("Testes unitário ModalityController", () => {
   it("Deve retornar erro 422 caso não seja passado nenhum dado", async () => {
-    const errors = {
-      email: contactTranslate.required,
-      phone: contactTranslate.required,
-      address: contactTranslate.required,
-      partnerId: contactTranslate.required
-    }
+    const errors = undefined
     const req = { body: {} } as any
     const res = {
       status: jest.fn().mockReturnThis(),
       send: jest.fn()
     } as any
     const next = jest.fn()
-    await ContactController.saveOneContact(req, res, next)
+    await ModalityController.saveModality(req, res, next)
     expect(res.send).toBeCalledWith(
       new APIError(
         "UNPROCESSABLE_ENTITY",
@@ -29,25 +23,6 @@ describe("Testes unitário ContactController", () => {
       )
     )
   })
-
-  it("Deve retornar erro 400 caso não seja passado um id", async () => {
-    const req = { params: { id: undefined } } as any
-    const res = {
-      status: jest.fn().mockReturnThis(),
-      send: jest.fn()
-    } as any
-    const next = jest.fn()
-    await ContactController.getContact(req, res, next)
-    expect(res.send).toBeCalledWith(
-      new APIError("BAD_REQUEST",
-        HttpStatusCode.BAD_REQUEST,
-        true,
-        businessError.GENERIC,
-        undefined
-      )
-    )
-  })
-
   it("Deve retornar erro 401 caso não seja passado um token de autorizacao", async () => {
     const req = { headers: { authorization: undefined } } as any
     const res = {
@@ -55,7 +30,7 @@ describe("Testes unitário ContactController", () => {
       send: jest.fn()
     } as any
     const next = jest.fn()
-    await ContactController.getAllContacts(req, res, next)
+    await ModalityController.getAllModality(req, res, next)
     expect(res.send).toBeCalledWith(
       new APIError("UNAUTHORIZED",
         HttpStatusCode.UNAUTHORIZED,
@@ -67,13 +42,31 @@ describe("Testes unitário ContactController", () => {
   })
 
   it("Deve retornar erro 400 caso não seja passado um payload", async () => {
-    const req = { body: {} } as any
+    const req = { params: { id: undefined } } as any
     const res = {
       status: jest.fn().mockReturnThis(),
       send: jest.fn()
     } as any
     const next = jest.fn()
-    await ContactController.updateContact(req, res, next)
+    await ModalityController.getModality(req, res, next)
+    expect(res.send).toBeCalledWith(
+      new APIError("BAD_REQUEST",
+        HttpStatusCode.BAD_REQUEST,
+        true,
+        businessError.GENERIC,
+        undefined
+      )
+    )
+  })
+
+  it("Deve retornar erro 400 caso não seja passado um payload", async () => {
+    const req = { body: {}, params: { id: undefined } } as any
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn()
+    } as any
+    const next = jest.fn()
+    await ModalityController.updateModality(req, res, next)
     expect(res.send).toBeCalledWith(
       new APIError("BAD_REQUEST",
         HttpStatusCode.BAD_REQUEST,
@@ -91,7 +84,7 @@ describe("Testes unitário ContactController", () => {
       send: jest.fn()
     } as any
     const next = jest.fn()
-    await ContactController.deleteContact(req, res, next)
+    await ModalityController.deleteModality(req, res, next)
     expect(res.send).toBeCalledWith(
       new APIError("BAD_REQUEST",
         HttpStatusCode.BAD_REQUEST,
