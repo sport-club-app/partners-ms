@@ -7,10 +7,9 @@
     "registry": "http://devops-dev.ddns.net:8081/repository/npm-private/"
   },
   "scripts": {
-    "test:coverage": "jest && npx lite-server",
+    "test:coverage": "jest ./__test__/unit/** && npx lite-server",
     "test:watch": "jest --watch",
-    "test:comp": "jest ./__test__/component/**",
-    "test": "jest --forceExit",
+    "test": "jest --detectOpenHandles --forceExit",
     "test:unit": "jest --forceExit ./__test__/unit/**",
     "test:integration": "jest ./__test__/integration/** --detectOpenHandles --forceExit",
     "start": "node -r dotenv/config ./build/index.js",
