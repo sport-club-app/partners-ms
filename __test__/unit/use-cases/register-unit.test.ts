@@ -1,9 +1,8 @@
-// @ts-nocheck
-import { fieldValidated } from "../../../src/validators/registerValidator"
-import RegisterController from "../../../src/app/controllers/RegisterController"
-import { APIError } from "../../../src/exceptions/base-error"
-import businessError from "../../../src/exceptions/business-error"
-import { HttpStatusCode } from "../../../src/exceptions/interfaces"
+
+import RegisterController from "@/app/controllers/RegisterController"
+import { APIError } from "@/app/exceptions/base-error"
+import businessError from "@/app/exceptions/business-error"
+import { HttpStatusCode } from "@/app/exceptions/interfaces"
 
 describe("Testes unitários de Cadastro", () => {
   describe("Testes de validações", () => {
@@ -36,8 +35,8 @@ describe("Testes unitários de Cadastro", () => {
           }
         }
       }
-      const req = { body: {} }
-      const res = { status: jest.fn().mockReturnThis(), send: jest.fn() }
+      const req = { body: {} } as any
+      const res = { status: jest.fn().mockReturnThis(), send: jest.fn() } as any
       const next = jest.fn()
       await RegisterController.saveRegister(req, res, next)
       expect(res.send).toBeCalledWith(
@@ -83,8 +82,8 @@ describe("Testes unitários de Cadastro", () => {
           modality: [1]
         }
       }
-      const req = newRegister
-      const res = { status: jest.fn().mockReturnThis(), send: jest.fn() }
+      const req = newRegister as any
+      const res = { status: jest.fn().mockReturnThis(), send: jest.fn() } as any
       const next = jest.fn()
       await RegisterController.saveRegister(req, res, next)
       expect(res.send).toBeCalledWith(
@@ -132,8 +131,8 @@ describe("Testes unitários de Cadastro", () => {
           modality: [1]
         }
       }
-      const req = newRegister
-      const res = { status: jest.fn().mockReturnThis(), send: jest.fn() }
+      const req = newRegister as any
+      const res = { status: jest.fn().mockReturnThis(), send: jest.fn() } as any
       const next = jest.fn()
       await RegisterController.saveRegister(req, res, next)
       expect(res.send).toBeCalledWith(
@@ -180,8 +179,8 @@ describe("Testes unitários de Cadastro", () => {
           modality: [1]
         }
       }
-      const req = newRegister
-      const res = { status: jest.fn().mockReturnThis(), send: jest.fn() }
+      const req = newRegister as any
+      const res = { status: jest.fn().mockReturnThis(), send: jest.fn() } as any
       const next = jest.fn()
       await RegisterController.saveRegister(req, res, next)
       expect(res.send).toBeCalledWith(
@@ -228,8 +227,8 @@ describe("Testes unitários de Cadastro", () => {
           modality: [1]
         }
       }
-      const req = newRegister
-      const res = { status: jest.fn().mockReturnThis(), send: jest.fn() }
+      const req = newRegister as any
+      const res = { status: jest.fn().mockReturnThis(), send: jest.fn() } as any
       const next = jest.fn()
       await RegisterController.saveRegister(req, res, next)
       expect(res.send).toBeCalledWith(
@@ -276,8 +275,8 @@ describe("Testes unitários de Cadastro", () => {
           modality: [1]
         }
       }
-      const req = newRegister
-      const res = { status: jest.fn().mockReturnThis(), send: jest.fn() }
+      const req = newRegister as any
+      const res = { status: jest.fn().mockReturnThis(), send: jest.fn() } as any
       const next = jest.fn()
       await RegisterController.saveRegister(req, res, next)
       expect(res.send).toBeCalledWith(
@@ -324,8 +323,8 @@ describe("Testes unitários de Cadastro", () => {
           modality: [1]
         }
       }
-      const req = newRegister
-      const res = { status: jest.fn().mockReturnThis(), send: jest.fn() }
+      const req = newRegister as any
+      const res = { status: jest.fn().mockReturnThis(), send: jest.fn() } as any
       const next = jest.fn()
       await RegisterController.saveRegister(req, res, next)
       expect(res.send).toBeCalledWith(

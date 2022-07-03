@@ -48,15 +48,15 @@ class ContractController {
 
   async getContact (req: Request, res: Response, next: NextFunction) {
     try {
-      const result = await getContactUseCase.execute(Number(req.params.id))
-      if (!result) {
-        throw new APIError("NOT_FOUND",
-          HttpStatusCode.NOT_FOUND,
+      if (!req.params.id) {
+        throw new APIError("BAD_REQUEST",
+          HttpStatusCode.BAD_REQUEST,
           true,
-          businessError.CONTACT_NOT_FOUND,
+          businessError.GENERIC,
           undefined
         )
       }
+      const result = await getContactUseCase.execute(Number(req.params.id))
       return res.status(200).send(result)
     } catch (error) {
       return errorHandlerMiddleware.returnError(error, req, res, next)
@@ -65,6 +65,14 @@ class ContractController {
 
   async getAllContacts (req: Request, res: Response, next: NextFunction) {
     try {
+      if (!req.headers?.authorization) {
+        throw new APIError("BAD_REQUEST",
+          HttpStatusCode.BAD_REQUEST,
+          true,
+          businessError.GENERIC,
+          undefined
+        )
+      }
       const result = await getAllContacts.execute()
       if (!result) {
         throw new APIError("NOT_FOUND",
@@ -120,9 +128,9 @@ class ContractController {
   }
 
   async deleteContact (req: Request, res: Response, next: NextFunction) {
-    const data: Contact = req.body
+    const id = req.params.id
     try {
-      if (!data) {
+      if (!id) {
         throw new APIError("BAD_REQUEST",
           HttpStatusCode.BAD_REQUEST,
           true,
@@ -130,23 +138,7 @@ class ContractController {
           undefined
         )
       }
-      if (!data.partnerId) {
-        throw new APIError("NOT_FOUND",
-          HttpStatusCode.NOT_FOUND,
-          true,
-          businessError.PARTNER_NOT_FOUND,
-          undefined
-        )
-      }
-      const result = await deleteContactUseCase.execute(Number(req.params.id))
-      if (!result) {
-        throw new APIError("NOT_FOUND",
-          HttpStatusCode.NOT_FOUND,
-          true,
-          businessError.PARTNER_NOT_FOUND,
-          undefined
-        )
-      }
+      const result = await deleteContactUseCase.execute(Number(id))
       return res.status(204).send(result)
     } catch (error) {
       return errorHandlerMiddleware.returnError(error, req, res, next)
