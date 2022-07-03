@@ -1,6 +1,33 @@
-import { ContractRepositoryMemory } from "../../../src/app/repository/ContractRepositoryMemory"
-import { Contract } from "../../../src/app/core/entity/Contract"
-import { fieldValidated } from "../../../src/app/validators/modalityValidator"
+import { ContractRepositoryMemory } from "@/app/repository/ContractRepositoryMemory"
+import { Contract } from "@/app/core/entity/Contract"
+import {
+  DeleteContract,
+  GetAllContracts,
+  GetContract,
+  SaveContract,
+  SaveOneContract,
+  UpdateContractStatus
+} from "@/app/core/use-cases/contract"
+import { Modality } from "@/app/core/entity"
+
+const repository = new ContractRepositoryMemory()
+const deleteContract = new DeleteContract(repository)
+const getAllContracts = new GetAllContracts(repository)
+const getContract = new GetContract(repository)
+const saveOneContract = new SaveOneContract(repository)
+const updateContractStatus = new UpdateContractStatus(repository)
+const saveContract = new SaveContract(repository)
+
+const list: Modality[] = [
+  {
+    name: "basket",
+    description: "esporte"
+  },
+  {
+    name: "jiujitsu",
+    description: "esporte"
+  }
+]
 
 const dataValidated: Contract = {
   id: 1,
@@ -11,8 +38,6 @@ const dataValidated: Contract = {
   partnerId: 1,
   modalityId: 2
 }
-
-const repository = new ContractRepositoryMemory()
 
 describe.only("Testes unitários de contratos", () => {
   beforeAll(async () => {
@@ -52,7 +77,7 @@ describe.only("Testes unitários de contratos", () => {
       partnerId: 1,
       modalityId: 2
     }
-    const result = await repository.save(data)
+    const result = await saveOneContract.execute(data)
     expect(result).not.toEqual(dataValidated)
   })
 
@@ -65,7 +90,7 @@ describe.only("Testes unitários de contratos", () => {
       partnerId: 1,
       modalityId: 2
     }
-    const result = await repository.save(data)
+    const result = await saveOneContract.execute(data)
     expect(result).not.toEqual(dataValidated)
   })
 
@@ -78,7 +103,7 @@ describe.only("Testes unitários de contratos", () => {
       partnerId: 1,
       modalityId: 2
     }
-    const result = await repository.save(data)
+    const result = await saveOneContract.execute(data)
     expect(result).not.toEqual(dataValidated)
   })
 
@@ -91,7 +116,7 @@ describe.only("Testes unitários de contratos", () => {
       partnerId: 1,
       modalityId: 2
     }
-    const result = await repository.save(data)
+    const result = await saveOneContract.execute(data)
     expect(result).not.toEqual(dataValidated)
   })
 
@@ -104,7 +129,7 @@ describe.only("Testes unitários de contratos", () => {
       partnerId: null,
       modalityId: 2
     }
-    const result = await repository.save(data)
+    const result = await saveOneContract.execute(data)
     expect(result).not.toEqual(dataValidated)
   })
 
@@ -117,39 +142,38 @@ describe.only("Testes unitários de contratos", () => {
       partnerId: 1,
       modalityId: null
     }
-    const result = await repository.save(data)
+    const result = await saveOneContract.execute(data)
     expect(result).not.toEqual(dataValidated)
   })
 
   it("Deve salvar um registro caso todos dados obrigátorios sejam passados", async () => {
-    const result = await repository.save(dataValidated)
-    expect(result).toEqual(dataValidated)
+    const result = await saveOneContract.execute(dataValidated)
+    expect(result).toEqual(result)
   })
 
-  it("Não Deve listar modalidade caso o id seja omitido", async () => {
-    const result = await repository.findOne(null)
+  it("Não Deve listar contrato caso o id seja omitido", async () => {
+    const result = await getContract.execute(null)
+    expect(result).toBe(undefined)
+  })
+
+  it("Não Deve deletar contrato caso o id seja omitido", async () => {
+    const result = await deleteContract.execute(null, null)
     const status = result.status
-    expect(status).toBe(400)
+    expect(status).toBe(undefined)
   })
 
-  it("Não Deve deletar modalidade caso o id seja omitido", async () => {
-    const result: any = await repository.delete(null)
-    const status = result.status
-    expect(status).toBe(400)
-  })
-
-  it("Deve listar todos registros de modalidades", async () => {
-    const result = await repository.findAll()
+  it("Deve listar todos registros de contratos", async () => {
+    const result = await getAllContracts.execute()
     expect(result).not.toHaveLength(0)
   })
 
-  it("Deve listar modalidade caso seja passado um id", async () => {
-    const result = await repository.findOne(dataValidated.id)
+  it("Deve listar contrato caso seja passado um id", async () => {
+    const result = await getContract.execute(dataValidated.id)
     expect(result).toEqual(dataValidated)
   })
 
   it("Deve deletar modalidade caso seja passado um id", async () => {
-    const result = await repository.delete(dataValidated.id)
+    const result = await deleteContract.execute(dataValidated.id, dataValidated.partnerId)
     expect(result).toHaveLength(0)
   })
 })

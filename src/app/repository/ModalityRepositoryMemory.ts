@@ -1,35 +1,54 @@
 import { Modality } from "@/app/core/entity"
+import { IRepositoryDbMethodsBase } from "./RepositoryBase"
 
 const modalityList: Modality[] = []
 
-export class ModalityRepositoryMemory {
-  async save (modality: Modality) {
-    modality.id = Math.floor(Math.random() * 1000)
-    modalityList.push(modality)
-    return modality
-  }
+export interface IModalityRepositoryDbMethods extends Partial<IRepositoryDbMethodsBase<Modality>> {
+  createMany(modality: Modality[]): Promise<Modality[]>
+}
 
-  async findAll () {
-    return modalityList
+export class ModalityRepositoryMemory implements Partial<IModalityRepositoryDbMethods> {
+  async save (modality: Modality) {
+    return Promise.resolve().then(() => {
+      modality.id = Math.floor(Math.random() * 1000)
+      modalityList.push(modality)
+      return modalityList
+    }).catch((err) => {
+      return err
+    })
   }
 
   async findOne (id: number) {
-    if (!id) {
-      return {
-        status: 400
-      }
-    }
-    return modalityList.find((pi) => pi.id === id)
+    return Promise.resolve().then(() => {
+      return modalityList.find((pi) => pi.id === id)
+    }).catch((err) => {
+      return err
+    })
   }
 
   async delete (id: number) {
-    if (!id) {
-      return {
-        status: 400
-      }
-    }
-    const thisModality = modalityList.find((pi) => pi.id === id)
-    const result = modalityList.splice(thisModality.id, 1)
-    return result
+    return Promise.resolve().then(() => {
+      const thisModality = modalityList.find((pi) => pi.id === id)
+      const result = modalityList.splice(thisModality.id, 1)
+      return result
+    }).catch((err) => {
+      return err
+    })
+  }
+
+  async createMany (modality: Modality[]) {
+    return Promise.resolve().then(() => {
+      return [...modalityList, modality]
+    }).catch((err) => {
+      return err
+    })
+  }
+
+  async find (filter?: object) {
+    return Promise.resolve().then(() => {
+      return modalityList
+    }).catch((err) => {
+      return err
+    })
   }
 }

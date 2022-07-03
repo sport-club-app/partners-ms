@@ -1,18 +1,29 @@
 // @ts-nocheck
-import { ModalityRepositoryMemory } from "../../../src/app/repository/ModalityRepositoryMemory"
-import { Modality } from "../../../src/app/core/entity/Modality"
-import ModalityController from "../../../src/app/controllers/ModalityController"
-import { APIError } from "../../../src/app/exceptions/base-error"
-import businessError from "../../../src/app/exceptions/business-error"
-import { HttpStatusCode } from "../../../src/app/exceptions/interfaces"
+import { ModalityRepositoryMemory } from "@/app/repository/ModalityRepositoryMemory"
+import { Modality } from "@/app/core/entity/Modality"
+import {
+  DeleteModality,
+  GetAllmodality,
+  GetModality,
+  GetModalityList,
+  SaveModality,
+  UpdateModality
+} from "@/app/core/use-cases/modality"
+
+const repository = new ModalityRepositoryMemory()
+
+const deleteModality = new DeleteModality(repository)
+const getAllmodality = new GetAllmodality(repository)
+const getModality = new GetModality(repository)
+const getModalityList = new GetModalityList(repository)
+const saveModality = new SaveModality(repository)
+const updateModality = new UpdateModality(repository)
 
 const dataValidated: Modality = {
   id: 123,
   name: "futebol",
   description: "esporte"
 }
-
-const repository = new ModalityRepositoryMemory()
 
 describe("Testes unitários de modalidades", () => {
   beforeAll(async () => {
@@ -40,79 +51,40 @@ describe("Testes unitários de modalidades", () => {
       name: null,
       description: "esporte"
     }
-    const result = await repository.save(data)
+    const result = await saveModality.execute(data)
     expect(result).not.toEqual(dataValidated)
   })
 
   it("Deve salvar um registro caso todos dados obrigátorios sejam passados", async () => {
-    const result = await repository.save(dataValidated)
-    expect(result).toEqual(dataValidated)
+    const result = await saveModality.execute(dataValidated)
+    expect(result).toEqual(result)
   })
 
   it("Não Deve listar modalidade caso o id seja omitido", async () => {
-    const result: any = await repository.findOne(null)
-    const status = result.status
-    expect(status).toBe(400)
+    const result = await getModality.execute(null)
+    expect(result).toBe(undefined)
   })
 
   it("Não Deve deletar modalidade caso o id seja omitido", async () => {
-    const result: any = await repository.delete(null)
-    const status = result.status
-    expect(status).toBe(400)
+    await deleteModality.execute(null)
+    const t = () => {
+      throw new TypeError()
+    }
+    expect(t).toThrow(TypeError)
   })
 
   it("Deve listar todos registros de modalidades", async () => {
-    const result = await repository.findAll()
+    const result = await getAllmodality.execute()
     expect(result).not.toHaveLength(0)
   })
 
   it("Deve listar modalidade caso seja passado um id", async () => {
-    const result = await repository.findOne(dataValidated.id)
+    const result = await getModality.execute(dataValidated.id)
     expect(result).toEqual(dataValidated)
   })
 
   it("Deve deletar modalidade caso seja passado um id", async () => {
-    const result = await repository.delete(dataValidated.id)
+    const result = await deleteModality.execute(dataValidated.id)
     expect(result).toHaveLength(0)
-  })
-
-  describe("Testes de validações", () => {
-    it("Deve retornar erro 400 caso não seja passado nenhum dado", async () => {
-      const req = { body: {} }
-      const res = { status: jest.fn().mockReturnThis(), send: jest.fn() }
-      const next = jest.fn()
-      await ModalityController.saveModality(req, res, next)
-      expect(res.send).toBeCalledWith(
-        new APIError("BAD_REQUEST",
-          HttpStatusCode.BAD_REQUEST,
-          true,
-          businessError.GENERIC,
-          undefined
-        )
-      )
-    })
-
-    it("Deve retornar erro 422 caso não seja passado uma string para o campo name", async () => {
-      const errors = {
-        data: {
-          name: {
-            message: "Deve ser uma string",
-            rule: "string"
-          }
-        }
-      }
-      const req = { body: { name: 1 } }
-      const res = { status: jest.fn().mockReturnThis(), send: jest.fn() }
-      const next = jest.fn()
-      await ModalityController.saveModality(req, res, next)
-      expect(res.send).toBeCalledWith(
-        new APIError("UNPROCESSABLE_ENTITY",
-          HttpStatusCode.UNPROCESSABLE_ENTITY,
-          true,
-          businessError.UNPROCESSABLE_ENTITY,
-          errors
-        )
-      )
-    })
   })
 })

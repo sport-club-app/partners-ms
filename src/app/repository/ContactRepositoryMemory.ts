@@ -11,10 +11,14 @@ export interface IContactRepositoryDbMethods extends Partial<IRepositoryDbMethod
   createMany(contacts: Contact[]): Promise<ContactModel[]>
 }
 export class ContactMemory implements Partial<IContactRepositoryDbMethods> {
-  async save (contactInfomration: Contact) {
-    contactInfomration.id = Math.floor(Math.random() * 1000)
-    contactInfomrationList.push(contactInfomration)
-    return contactInfomration
+  async save (contact: Contact) {
+    return Promise.resolve().then(() => {
+      contact.id = Math.floor(Math.random() * 1000)
+      contactInfomrationList.push(contact)
+      return contact
+    }).catch((err) => {
+      return err
+    })
   }
 
   async find () {

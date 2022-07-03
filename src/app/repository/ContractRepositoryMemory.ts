@@ -1,36 +1,100 @@
 import { Contract } from "@/app/core/entity"
-import { IContractRepositoryDbMethods } from "./ContractRepositoryDb"
+import { UpdateResult } from "typeorm"
+import { IRepositoryDbMethodsBase } from "./RepositoryBase"
+
+export interface IContractRepositoryDbMethods
+    extends IRepositoryDbMethodsBase<Contract> {
+    deleteWithPartner(id: number, partnerId: number): Promise<any>;
+    updateWithPartner(
+        id: number,
+        partnerId: number,
+        contract: Contract
+    ): Promise<any>;
+}
 
 const contractList: Contract[] = []
-
-export class ContractRepositoryMemory {
+export class ContractRepositoryMemory implements Partial<IContractRepositoryDbMethods> {
   async save (contract: Contract) {
-    contract.id = Math.floor(Math.random() * 1000)
-    contractList.push(contract)
-    return contract
-  }
-
-  async findAll () {
-    return contractList
+    return Promise.resolve().then(() => {
+      contract.id = Math.floor(Math.random() * 1000)
+      contractList.push(contract)
+      return contract
+    }).catch((err) => {
+      return err
+    })
   }
 
   async findOne (id: number) {
-    if (!id) {
-      return {
-        status: 400
-      }
-    }
-    return contractList.find(pi => pi.id === id)
+    return Promise.resolve().then(() => {
+      return contractList.find(pi => pi.id === id)
+    }).catch((err) => {
+      return err
+    })
   }
 
   async delete (id: number) {
-    if (!id) {
-      return {
-        status: 400
-      }
-    }
-    const thisContract = contractList.find(pi => pi.id === id)
-    const result = contractList.splice(thisContract.id, 1)
-    return result
+    return Promise.resolve().then(() => {
+      const thisContract = contractList.find(pi => pi.id === id)
+      const result = contractList.splice(thisContract.id, 1)
+      return result
+    }).catch((err) => {
+      return err
+    })
+  }
+
+  async create (contract: Contract) {
+    return Promise.resolve().then(() => {
+      contract.id = Math.floor(Math.random() * 1000)
+      contractList.push(contract)
+      return contract
+    }).catch((err) => {
+      return err
+    })
+  }
+
+  async deleteWithPartner (id: number, partnerId: number): Promise<any> {
+    return Promise.resolve().then(() => {
+      const thisContract = contractList.find(pi => pi.partnerId === partnerId)
+      const result = contractList.splice(thisContract.id, 1)
+      return result
+    }).catch((err) => {
+      return err
+    })
+  }
+
+  async find (filter?: object) {
+    return Promise.resolve().then(() => {
+      return contractList
+    }).catch((err) => {
+      return err
+    })
+  }
+
+  async updateWithPartner (id: number, partnerId: number, contract: Contract): Promise<any> {
+    return Promise.resolve().then(() => {
+      const thisContract = contractList.map(e => {
+        if (e.id == id && e.partnerId == partnerId) {
+          return e == contract
+        }
+        return e
+      })
+      return thisContract
+    }).catch((err) => {
+      return err
+    })
+  }
+
+  async update (id: number, contract: Contract): Promise<UpdateResult> {
+    return Promise.resolve().then(() => {
+      const thisContract = contractList.map(e => {
+        if (e.id == id) {
+          return e == contract
+        }
+        return e
+      })
+      return thisContract
+    }).catch((err) => {
+      return err
+    })
   }
 }

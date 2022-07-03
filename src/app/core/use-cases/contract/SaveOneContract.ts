@@ -1,6 +1,9 @@
 import { ContractRepositoryDb, IContractRepositoryDbMethods } from "@/app/repository/ContractRepositoryDb"
 import { Contract } from "@/app/core/entity"
 import { addMonths, format, compareAsc, parseISO, compareDesc, subMonths } from "date-fns"
+import { APIError } from "@/app/exceptions/base-error"
+import { HttpStatusCode } from "@/app/exceptions/interfaces"
+import businessError from "@/app/exceptions/business-error"
 
 export class SaveOneContract {
     private contractRepository: IContractRepositoryDbMethods
@@ -10,6 +13,14 @@ export class SaveOneContract {
 
     async execute (contract: Contract) {
       if (!contract.status) return !contract.status
+      if (!contract.dueDate) {
+        return new APIError("BAD_REQUEST",
+          HttpStatusCode.BAD_REQUEST,
+          true,
+          businessError.GENERIC,
+          undefined
+        )
+      }
 
       if (contract.dueDate) {
         const start = parseISO(String(contract.start))

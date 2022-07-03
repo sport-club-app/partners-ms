@@ -1,6 +1,4 @@
 import { UpdateResult, DeleteResult } from "typeorm"
-import businessError from "@/app/exceptions/business-error"
-import { HttpStatusCode } from "@/app/exceptions/interfaces"
 import { APIError } from "@/app/exceptions/base-error"
 export interface IRepositoryDbMethodsBase<T> {
     create(data: T | T[]): Promise<T>;
