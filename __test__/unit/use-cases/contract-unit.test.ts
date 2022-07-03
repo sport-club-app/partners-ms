@@ -1,12 +1,10 @@
-import { ContractRepositoryMemory } from "@/app/repository/ContractRepositoryMemory"
+import { ContractRepositoryMemory } from "@/app/repository/in-memory/ContractRepositoryMemory"
 import { Contract } from "@/app/core/entity/Contract"
 import {
   DeleteContract,
   GetAllContracts,
   GetContract,
-  SaveContract,
-  SaveOneContract,
-  UpdateContractStatus
+  SaveOneContract
 } from "@/app/core/use-cases/contract"
 import { Modality } from "@/app/core/entity"
 
@@ -15,8 +13,6 @@ const deleteContract = new DeleteContract(repository)
 const getAllContracts = new GetAllContracts(repository)
 const getContract = new GetContract(repository)
 const saveOneContract = new SaveOneContract(repository)
-const updateContractStatus = new UpdateContractStatus(repository)
-const saveContract = new SaveContract(repository)
 
 const list: Modality[] = [
   {

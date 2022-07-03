@@ -1,5 +1,5 @@
 import { Modality } from "@/app/core/entity"
-import { IRepositoryDbMethodsBase } from "./RepositoryBase"
+import { IRepositoryDbMethodsBase } from "../RepositoryBase"
 
 const modalityList: Modality[] = []
 

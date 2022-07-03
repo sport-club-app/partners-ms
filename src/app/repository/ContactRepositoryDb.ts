@@ -16,7 +16,7 @@ export class ContactRepositoryDb implements IContactRepositoryDbMethods {
 
   async find () {
     return await entityManager.getRepository(ContactModel)
-      .createQueryBuilder("modality")
+      .createQueryBuilder("contact")
       .getMany()
   }
 

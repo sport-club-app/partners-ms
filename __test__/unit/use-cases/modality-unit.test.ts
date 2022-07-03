@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { ModalityRepositoryMemory } from "@/app/repository/ModalityRepositoryMemory"
+import { ModalityRepositoryMemory } from "@/app/repository/in-memory/ModalityRepositoryMemory"
 import { Modality } from "@/app/core/entity/Modality"
 import {
   DeleteModality,

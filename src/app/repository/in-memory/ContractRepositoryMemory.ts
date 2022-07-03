@@ -1,6 +1,6 @@
 import { Contract } from "@/app/core/entity"
 import { UpdateResult } from "typeorm"
-import { IRepositoryDbMethodsBase } from "./RepositoryBase"
+import { IRepositoryDbMethodsBase } from "../RepositoryBase"
 
 export interface IContractRepositoryDbMethods
     extends IRepositoryDbMethodsBase<Contract> {
