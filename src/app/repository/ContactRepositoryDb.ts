@@ -3,45 +3,45 @@ import { entityManager } from "@/infra/db/config"
 import { ContactModel } from "@/infra/models/ContactModel"
 import { IRepositoryDbMethodsBase } from "./RepositoryBase"
 export interface IContactRepositoryDbMethods extends Partial<IRepositoryDbMethodsBase<Contact>> {
-    findEmail(contacts: Contact[]): Promise<ContactModel[]>
-    saveOneContact(contact: Contact): Promise<ContactModel>
+    findEmail(contacts: Contact[]): Promise<String>
+    saveOneContact(contact: Contact): Promise<Contact>
     updateContact(id: number, partnerId: number, contact: Contact): Promise<any>
-    createMany(contacts: Contact[]): Promise<ContactModel[]>
+    createMany(contacts: Contact[]): Promise<Contact[]>
 }
+
+const repository = entityManager.getRepository(ContactModel)
 
 export class ContactRepositoryDb implements IContactRepositoryDbMethods {
   async createMany (contacts: Contact[]) {
-    return await entityManager.save(ContactModel, contacts)
+    return await repository.save(contacts)
   }
 
   async find () {
-    return await entityManager.getRepository(ContactModel)
-      .createQueryBuilder("contact")
-      .getMany()
+    return await repository.find()
   }
 
   async findOne (id: number) {
-    return await entityManager.findOne(ContactModel, { where: { id: id } })
+    return await repository.findOne({ where: { id: id } })
   }
 
-  async findEmail (contacts: ContactModel[]) {
+  async findEmail (contacts: Contact[]) {
     const listEmail = []
     for (const ct of contacts) {
-      const emailExists = await entityManager.find(ContactModel, { where: { email: ct.email } })
+      const emailExists = await repository.find({ where: { email: ct.email } })
       listEmail.push(emailExists)
     }
     return listEmail[0]
   }
 
   async saveOneContact (contact: Contact) {
-    return await entityManager.save(ContactModel, contact)
+    return await repository.save(contact)
   }
 
   async updateContact (id: number, partnerId: number, contact: Contact) {
-    return await entityManager.update(ContactModel, id, { ...contact, partnerId: partnerId })
+    return await repository.update(id, { ...contact, partnerId: partnerId })
   }
 
   async delete (id: number) {
-    return await entityManager.delete(ContactModel, id)
+    return await repository.delete(id)
   }
 }

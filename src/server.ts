@@ -23,11 +23,6 @@ server.get("/", (_, res) => {
   res.redirect(`/${version}/health`)
 })
 
-process.on("unhandledRejection", (reason, promise) => {
-  console.log("Unhandled Rejection at:", reason)
-  process.exit(1)
-})
-
 server.use(errorHandlerMiddleware.logErrorMiddleware)
 server.use(errorHandlerMiddleware.returnError)
 server.use(authMiddleware.execute)

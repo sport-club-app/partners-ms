@@ -1,5 +1,5 @@
 import { Partner } from "@/app/core/entity"
-import { IRepositoryDbMethodsBase } from "../RepositoryBase"
+import { IRepositoryDbMethodsBase } from "@/app/repository/RepositoryBase"
 
 const partnerList: Partner[] = []
 

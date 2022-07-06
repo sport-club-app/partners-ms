@@ -12,42 +12,41 @@ export interface IPartnerRepositoryDbMethods
     ): Promise<Partner>;
 }
 
+const repository = entityManager.getRepository(PartnerModel)
+
 export class PartnerRepositoryDb implements IPartnerRepositoryDbMethods {
   async create (partner: Partner) {
-    return await entityManager.save(PartnerModel, partner)
+    return await repository.save(partner)
   }
 
   async findAll () {
-    return await entityManager
-      .getRepository(PartnerModel)
-      .createQueryBuilder("partner")
-      .getMany()
+    return await repository.find()
   }
 
   async findOne (id: number) {
-    return await entityManager.findOne(PartnerModel, { where: { id: id } })
+    return await repository.findOne({ where: { id: id } })
   }
 
   async update (id: number, partner: Partner) {
-    return await entityManager.update(PartnerModel, id, partner)
+    return await repository.update(id, partner)
   }
 
   async findEmail (partner: Partner) {
-    return await entityManager.findOne(PartnerModel, {
+    return await repository.findOne({
       where: { id: partner.id },
       relations: ["contacts"]
     })
   }
 
   async delete (id: number) {
-    return await entityManager.delete(PartnerModel, id)
+    return await repository.delete(id)
   }
 
   async findRelationsOne (
     id: number,
     relations: Array<"contacts" | "modalities" | "contracts">
   ) {
-    return await entityManager.findOne(PartnerModel, {
+    return await repository.findOne({
       where: { id: id },
       relations: relations
     })

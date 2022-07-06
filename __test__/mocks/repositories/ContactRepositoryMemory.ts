@@ -1,6 +1,6 @@
 import { Contact } from "@/app/core/entity"
 import { ContactModel } from "@/infra/models/ContactModel"
-import { IRepositoryDbMethodsBase } from "../RepositoryBase"
+import { IRepositoryDbMethodsBase } from "@/app/repository/RepositoryBase"
 
 const contactInfomrationList: Contact[] = []
 

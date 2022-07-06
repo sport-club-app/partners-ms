@@ -12,44 +12,41 @@ export interface IContractRepositoryDbMethods
         contract: Contract
     ): Promise<any>;
 }
-
+const repository = entityManager.getRepository(ContractModel)
 export class ContractRepositoryDb implements IContractRepositoryDbMethods {
   async create (contract: Contract) {
-    return await entityManager.save(ContractModel, contract)
+    return await repository.save(contract)
   }
 
   async find () {
-    return await entityManager
-      .getRepository(ContractModel)
-      .createQueryBuilder("contract")
-      .getMany()
+    return await repository.find()
   }
 
   async findOne (id: number) {
-    return await entityManager.findOne(ContractModel, {
+    return await repository.findOne({
       where: { id: id }
     })
   }
 
   async updateWithPartner (id: number, partnerId: number, contract: Contract) {
-    return await entityManager.update(ContractModel, id, {
+    return await repository.update(id, {
       ...contract,
       partnerId: partnerId
     })
   }
 
   async update (id: number, contract: Contract) {
-    return await entityManager.update(ContractModel, id, contract)
+    return await repository.update(id, contract)
   }
 
   async deleteWithPartner (id: number, partnerId: number) {
-    return await entityManager.delete(ContractModel, {
+    return await repository.delete({
       partnerId: partnerId,
       id: id
     })
   }
 
   async delete (id: number) {
-    return await entityManager.delete(ContractModel, id)
+    return await repository.delete(id)
   }
 }

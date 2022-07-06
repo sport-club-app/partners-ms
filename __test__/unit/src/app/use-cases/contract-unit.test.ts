@@ -1,4 +1,4 @@
-import { ContractRepositoryMemory } from "@/app/repository/in-memory/ContractRepositoryMemory"
+import { ContractRepositoryMemory } from "../../../../mocks/repositories"
 import { Contract } from "@/app/core/entity/Contract"
 import {
   DeleteContract,

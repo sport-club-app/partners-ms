@@ -1,7 +1,7 @@
 import { sleep } from "@/app/utils/sleep"
 
-describe("Name of the group", () => {
-  it("should ", () => {
+describe("Teste unitario sleep", () => {
+  it("deve estar definido", () => {
     expect(sleep(2000)).resolves.toBe({})
   })
 })

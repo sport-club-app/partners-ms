@@ -7,26 +7,25 @@ export interface IModalityRepositoryDbMethods extends Partial<IRepositoryDbMetho
   createMany(modality: Modality[]): Promise<Modality[]>
 }
 
+const repository = entityManager.getRepository(ModalityModel)
 export class ModalityRepositoryDb implements IModalityRepositoryDbMethods {
   async createMany (modality: Modality[]) {
-    return await entityManager.save(ModalityModel, modality)
+    return await repository.save(modality)
   }
 
   async find () {
-    return await entityManager.getRepository(ModalityModel)
-      .createQueryBuilder("modality")
-      .getMany()
+    return await repository.find()
   }
 
   async findOne (id: number) {
-    return await entityManager.findOne(ModalityModel, { where: { id: id } })
+    return await repository.findOne({ where: { id: id } })
   }
 
   async delete (id: number) {
-    return await entityManager.delete(ModalityModel, id)
+    return await repository.delete(id)
   }
 
   async update (id: number, modality: Modality) {
-    return await entityManager.update(ModalityModel, id, modality)
+    return await repository.update(id, modality)
   }
 }

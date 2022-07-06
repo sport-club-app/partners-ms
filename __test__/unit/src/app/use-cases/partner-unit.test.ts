@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { PartnerRepositoryMemory } from "@/app/repository/in-memory/PartnerRepositoryMemory"
+import { PartnerRepositoryMemory } from "../../../../mocks/repositories"
 import { Partner } from "@/app/core/entity/Partner"
 
 import {

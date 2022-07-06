@@ -1,4 +1,4 @@
-import { ContactMemory } from "@/app/repository/in-memory/ContactRepositoryMemory"
+import { ContactMemory } from "../../../../mocks/repositories"
 import { Contact } from "@/app/core/entity/Contact"
 import {
   SaveOneContact,
