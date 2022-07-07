@@ -10,8 +10,12 @@ export default {
     "!**/node_modules/**",
     "!**/vendor/**",
     "!__test__/**",
-    "!src/app/core/entity/**",
-    "!src/infra/models/**",
     "src/**/**.{js,ts}"
+  ],
+  coveragePathIgnorePatterns: [
+    "<rootDir>/src/infra/models",
+    "<rootDir>/src/infra/db",
+    "<rootDir>/src/infra/services/redis",
+    "<rootDir>/src/app/core/entity"
   ]
 }

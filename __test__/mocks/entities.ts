@@ -1,5 +1,4 @@
 import { Contact, Contract, Modality, Partner } from "@/app/core/entity"
-import { GetContract } from "@/app/core/use-cases/contract"
 
 export default {
   getContact () {

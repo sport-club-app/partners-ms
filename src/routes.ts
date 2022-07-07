@@ -1,10 +1,10 @@
 
 import express from "express"
-import PartnerController from "src/app/controllers/PartnerController"
-import ModalityController from "src/app/controllers/ModalityController"
-import ContractController from "src/app/controllers/ContractController"
-import RegisterController from "src/app/controllers/RegisterController"
-import ContactController from "src/app/controllers/ContactController"
+import PartnerController from "@/app/controllers/PartnerController"
+import ModalityController from "@/app/controllers/ModalityController"
+import ContractController from "@/app/controllers/ContractController"
+import RegisterController from "@/app/controllers/RegisterController"
+import ContactController from "@/app/controllers/ContactController"
 import { keycloak } from "@/infra/services/keycloak/config"
 
 export const router = express.Router()
