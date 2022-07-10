@@ -11,7 +11,7 @@ export class BaseError extends Error {
       httpCode: HttpStatusCode,
       isOperational: boolean,
       description: string,
-      data: any
+      data?: any
     ) {
       super()
       Object.setPrototypeOf(this, new.target.prototype)
@@ -31,7 +31,7 @@ export class APIError extends BaseError {
     httpCode = HttpStatusCode.INTERNAL_SERVER,
     isOperational = true,
     description = "internal server error",
-    data
+    data = {}
   ) {
     super(name, httpCode, isOperational, description, data)
   }

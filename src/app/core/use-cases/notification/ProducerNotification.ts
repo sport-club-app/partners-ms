@@ -9,9 +9,11 @@ export class ProducerNotification {
 
     async execute (message: string, topic: string) {
       const producer = this.kafka.producer()
+      await producer.connect()
       await producer.send({
         topic: topic,
         messages: [{ value: message, key: uuid() }]
       })
+      await producer.disconnect()
     }
 }

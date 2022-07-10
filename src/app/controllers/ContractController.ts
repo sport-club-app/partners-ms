@@ -1,6 +1,5 @@
 import "dotenv/config"
 import { NextFunction, Request, Response } from "express"
-import { fieldValidated } from "@/app/validators/contractValidator"
 import { Contract } from "@/app/core/entity"
 import { errorHandlerMiddleware } from "@/app/middleware/error-handler"
 import { APIError } from "@/app/exceptions/base-error"
@@ -19,15 +18,6 @@ class ContractController {
   async saveOneContract (req: Request, res: Response, next: NextFunction) {
     const data: Contract = req.body
     try {
-      const matched = await fieldValidated(data)
-      if (matched) {
-        throw new APIError("UNPROCESSABLE_ENTITY",
-          HttpStatusCode.UNPROCESSABLE_ENTITY,
-          true,
-          businessError.UNPROCESSABLE_ENTITY,
-          matched
-        )
-      }
       const result = await saveOneContractUseCase.execute(data)
       if (!result) {
         throw new APIError("NOT_FOUND",

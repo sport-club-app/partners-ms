@@ -1,7 +1,7 @@
 import niv from "node-input-validator"
 import { contactTranslate } from "./contactTranslate"
 
-export async function fieldValidated (data: any) {
+export async function fieldValidated (data: Object) {
   const v = new niv.Validator(data, {
     email: "required|email",
     phone: "required|integer",

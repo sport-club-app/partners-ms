@@ -1,3 +1,6 @@
+import { APIError } from "@/app/exceptions/base-error"
+import businessError from "@/app/exceptions/business-error"
+import { HttpStatusCode } from "@/app/exceptions/interfaces"
 import { ContractRepositoryDb, IContractRepositoryDbMethods } from "@/app/repository/ContractRepositoryDb"
 export class SaveContract {
     private contractRepository: IContractRepositoryDbMethods
@@ -5,14 +8,29 @@ export class SaveContract {
       this.contractRepository = contractRepository
     }
 
-    async execute (modalities: any, partnerId: number) {
-      const dataContract = modalities.map(e => {
+    async execute (modalities: any[], partnerId: number) {
+      if (modalities.length == 0) {
+        throw new APIError("BAD_REQUEST",
+          HttpStatusCode.BAD_REQUEST,
+          true,
+          businessError.MODALITY_NOT_FOUND
+        )
+      }
+      const dataContract = modalities.map(modality => {
         return {
-          ...e.contract,
-          modalityId: e.id,
+          ...modality.contract,
+          modalityId: modality.id,
           partnerId: partnerId
         }
       })
-      return this.contractRepository.create(dataContract)
+      const contractSaved = await this.contractRepository.create(dataContract)
+      if (!contractSaved) {
+        throw new APIError("BAD_REQUEST",
+          HttpStatusCode.BAD_REQUEST,
+          true,
+          businessError.CONTRACT_NOT_FOUND
+        )
+      }
+      return contractSaved
     }
 }

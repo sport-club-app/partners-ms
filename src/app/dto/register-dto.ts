@@ -15,7 +15,7 @@ export interface ISavePartnersDTOResponse{
 }
 
 export class SavePartnersDTOResponse {
-  async execute (partner: Partner, contract: Contract) {
+  static execute (partner: Partner, contract: Contract) {
     return {
       partner: {
         id: partner.id,

@@ -3,7 +3,7 @@ import { entityManager } from "@/infra/db/config"
 import { ContactModel } from "@/infra/models/ContactModel"
 import { IRepositoryDbMethodsBase } from "./RepositoryBase"
 export interface IContactRepositoryDbMethods extends Partial<IRepositoryDbMethodsBase<Contact>> {
-    findEmail(contacts: Contact[]): Promise<String>
+    findEmail(contacts: Contact[]): Promise<Contact[]>
     saveOneContact(contact: Contact): Promise<Contact>
     updateContact(id: number, partnerId: number, contact: Contact): Promise<any>
     createMany(contacts: Contact[]): Promise<Contact[]>
@@ -27,7 +27,7 @@ export class ContactRepositoryDb implements IContactRepositoryDbMethods {
   async findEmail (contacts: Contact[]) {
     const listEmail = []
     for (const ct of contacts) {
-      const emailExists = await repository.find({ where: { email: ct.email } })
+      const emailExists = await repository.findOne({ where: { email: ct.email } })
       listEmail.push(emailExists)
     }
     return listEmail[0]

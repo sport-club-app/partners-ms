@@ -31,8 +31,6 @@ export const registerFactory = () => {
 
   const producerNotification = new ProducerNotification(kafka)
 
-  const savePartnersDTOResponse = new SavePartnersDTOResponse()
-
   return {
     savePartnerUseCase,
     getFullRegisterDataPartner,
@@ -41,7 +39,6 @@ export const registerFactory = () => {
     saveModalityUseCase,
     getModalityUseCase,
     saveContractUseCase,
-    producerNotification,
-    savePartnersDTOResponse
+    producerNotification
   }
 }

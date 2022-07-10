@@ -26,7 +26,7 @@ server.get("/", (_, res) => {
 server.use(errorHandlerMiddleware.logErrorMiddleware)
 server.use(errorHandlerMiddleware.returnError)
 server.use(authMiddleware.execute)
-server.use(getNewRefreshToken.execute)
+// server.use(getNewRefreshToken.execute)
 
 server.use(keycloak.middleware({
   logout: "/logout",

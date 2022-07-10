@@ -1,6 +1,5 @@
 import "dotenv/config"
 import { NextFunction, Request, Response } from "express"
-import { fieldValidated } from "@/app/validators/contactValidator"
 import { contactFactory } from "@/app/factories/contact-factory"
 import { Contact } from "@/app/core/entity"
 import { errorHandlerMiddleware } from "@/app/middleware/error-handler"
@@ -21,23 +20,6 @@ class ContractController {
   async saveOneContact (req: Request, res: Response, next: NextFunction) {
     const data: Contact = req.body
     try {
-      if (!data) {
-        throw new APIError("BAD_REQUEST",
-          HttpStatusCode.BAD_REQUEST,
-          true,
-          businessError.GENERIC,
-          undefined
-        )
-      }
-      const matched = await fieldValidated(data)
-      if (matched) {
-        throw new APIError("UNPROCESSABLE_ENTITY",
-          HttpStatusCode.UNPROCESSABLE_ENTITY,
-          true,
-          businessError.UNPROCESSABLE_ENTITY,
-          matched
-        )
-      }
       const result = await saveContactUseCase.execute(data)
       await producerNotification.execute(JSON.stringify(result), process.env.PARTNER_TOPIC_CONTACT)
       return res.status(201).send(result)

@@ -16,18 +16,9 @@ const {
 } = modalityFactory()
 class ModalityController {
   async saveModality (req: Request, res: Response, next: NextFunction) {
-    const data: Modality = req.body
+    const data: Modality[] = req.body
     try {
-      const matched = await fieldValidated(data)
-      if (matched) {
-        throw new APIError("UNPROCESSABLE_ENTITY",
-          HttpStatusCode.UNPROCESSABLE_ENTITY,
-          true,
-          businessError.UNPROCESSABLE_ENTITY,
-          matched
-        )
-      }
-      const result = await saveModalityUseCase.execute(req.body)
+      const result = await saveModalityUseCase.execute(data)
       return res.status(201).send(result)
     } catch (error) {
       return errorHandlerMiddleware.returnError(error, req, res, next)

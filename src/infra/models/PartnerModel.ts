@@ -30,7 +30,7 @@ export class PartnerModel implements Partner {
     })
     contracts: ContractModel[];
 
-    @OneToMany(() => ContractModel, contacts => contacts.partner, {
+    @OneToMany(() => ContactModel, contacts => contacts.partner, {
       cascade: true,
       onUpdate: "CASCADE"
     })

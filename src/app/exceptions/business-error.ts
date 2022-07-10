@@ -9,6 +9,9 @@ class BusinessError {
     public PARTNER_NOT_FOUND = "PARTNER_NOT_FOUND"
     public MODALITY_NOT_FOUND = "MODALITY_NOT_FOUND"
     public UNPROCESSABLE_ENTITY = "UNPROCESSABLE_ENTITY"
+    public EMAIL_NOT_FOUND = "EMAIL_NOT_FOUND"
+    public EMAIL_EXISTS = "EMAIL_EXISTS"
+    public CONTACT_NOT_CREATED = "CONTACT_NOT_CREATED"
 }
 
 export default new BusinessError()

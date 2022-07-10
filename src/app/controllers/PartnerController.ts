@@ -1,6 +1,5 @@
 import "dotenv/config"
 import { NextFunction, Request, Response } from "express"
-import { fieldValidated } from "@/app/validators/partnerValidation"
 import { Partner } from "@/app/core/entity"
 import { partnerFactory } from "@/app/factories/partner-factory"
 import { errorHandlerMiddleware } from "@/app/middleware/error-handler"
@@ -18,15 +17,6 @@ class PartnerController {
   async savePartner (req: Request, res: Response, next: NextFunction) {
     const data: Partner = req.body
     try {
-      const matched = await fieldValidated(data)
-      if (matched) {
-        throw new APIError("UNPROCESSABLE_ENTITY",
-          HttpStatusCode.UNPROCESSABLE_ENTITY,
-          true,
-          businessError.UNPROCESSABLE_ENTITY,
-          matched
-        )
-      }
       const result = await savePartnerUseCase.execute(data)
       return res.status(201).send(result)
     } catch (error) {

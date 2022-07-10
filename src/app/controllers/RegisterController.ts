@@ -1,11 +1,11 @@
 import "dotenv/config"
 import { NextFunction, Request, Response } from "express"
-import { fieldValidated } from "@/app/validators/registerValidator"
 import { registerFactory } from "@/app/factories/register-factory"
 import { errorHandlerMiddleware } from "@/app/middleware/error-handler"
 import { APIError } from "@/app/exceptions/base-error"
 import { HttpStatusCode } from "@/app/exceptions/interfaces"
 import businessError from "@/app/exceptions/business-error"
+import { SavePartnersDTOResponse } from "@/app/dto/register-dto"
 
 const {
   getContactUseCase,
@@ -15,47 +15,26 @@ const {
   saveContactUseCase,
   saveContractUseCase,
   saveModalityUseCase,
-  savePartnerUseCase,
-  savePartnersDTOResponse
+  savePartnerUseCase
 } = registerFactory()
 class RegisterController {
   async saveRegister (req: Request, res: Response, next: NextFunction) {
+    await getContactUseCase.execute(req.body.contacts)
     try {
-      const matched = await fieldValidated(req.body)
-      if (matched) {
-        throw new APIError("UNPROCESSABLE_ENTITY",
-          HttpStatusCode.UNPROCESSABLE_ENTITY,
-          true,
-          businessError.UNPROCESSABLE_ENTITY,
-          matched
-        )
-      }
-      const dataContact = req.body.contacts
-      const findEmail: any = await getContactUseCase.execute(dataContact)
-      if (findEmail.length > 0) {
-        throw new APIError("INTERNAL_SERVER",
-          HttpStatusCode.INTERNAL_SERVER,
-          true,
-          businessError.GENERIC,
-          undefined
-        )
-      }
-      const contacts = await saveContactUseCase.execute(dataContact)
-
+      await getContactUseCase.execute(req.body.contacts)
+      const contacts = await saveContactUseCase.execute(req.body.contacts)
       await producerNotification.execute(JSON.stringify(contacts), "partners-ms-notification")
-
-      const dataModalities = req.body.modalities
-      const resultModality: any = await getModalityUseCase.execute(dataModalities)
+      const resultModality: any = await getModalityUseCase.execute(req.body.modalities)
       const modalities = await saveModalityUseCase.execute(resultModality)
 
       const dataPartner = req.body.partner
       dataPartner.contacts = contacts
       dataPartner.modalities = modalities
       const partner = await savePartnerUseCase.execute(dataPartner)
-      const contract = await saveContractUseCase.execute(dataModalities, partner.id)
+      const contract = await saveContractUseCase.execute(req.body.modalities, partner.id)
 
-      const resultformatData = savePartnersDTOResponse.execute(partner, contract)
-      return res.status(201).send(resultformatData)
+      const resultformatData = SavePartnersDTOResponse.execute(partner, contract)
+      return res.status(201).json(resultformatData)
     } catch (error) {
       return errorHandlerMiddleware.returnError(error, req, res, next)
     }
