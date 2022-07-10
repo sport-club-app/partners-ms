@@ -1,31 +1,34 @@
 import { Modality } from "@/app/core/entity"
 import { entityManager } from "@/infra/db/config"
 import { ModalityModel } from "@/infra/models/ModalityModel"
+import { Repository } from "typeorm"
 import { IRepositoryDbMethodsBase } from "./RepositoryBase"
 
 export interface IModalityRepositoryDbMethods extends Partial<IRepositoryDbMethodsBase<Modality>> {
   createMany(modality: Modality[]): Promise<Modality[]>
 }
-
-const repository = entityManager.getRepository(ModalityModel)
 export class ModalityRepositoryDb implements IModalityRepositoryDbMethods {
+  constructor (private repository: Repository<ModalityModel>) {
+    this.repository = repository
+  }
+
   async createMany (modality: Modality[]) {
-    return await repository.save(modality)
+    return await this.repository.save(modality)
   }
 
   async find () {
-    return await repository.find()
+    return await this.repository.find()
   }
 
   async findOne (id: number) {
-    return await repository.findOne({ where: { id: id } })
+    return await this.repository.findOne({ where: { id: id } })
   }
 
   async delete (id: number) {
-    return await repository.delete(id)
+    return await this.repository.delete(id)
   }
 
   async update (id: number, modality: Modality) {
-    return await repository.update(id, modality)
+    return await this.repository.update(id, modality)
   }
 }

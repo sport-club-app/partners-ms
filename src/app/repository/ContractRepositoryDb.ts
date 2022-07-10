@@ -1,6 +1,6 @@
 import { Contract } from "@/app/core/entity"
-import { entityManager } from "@/infra/db/config"
 import { ContractModel } from "@/infra/models/ContractModel"
+import { Repository } from "typeorm"
 import { IRepositoryDbMethodsBase } from "./RepositoryBase"
 
 export interface IContractRepositoryDbMethods
@@ -12,41 +12,45 @@ export interface IContractRepositoryDbMethods
         contract: Contract
     ): Promise<any>;
 }
-const repository = entityManager.getRepository(ContractModel)
+
 export class ContractRepositoryDb implements IContractRepositoryDbMethods {
+  constructor (private repository: Repository<ContractModel>) {
+    this.repository = repository
+  }
+
   async create (contract: Contract) {
-    return await repository.save(contract)
+    return await this.repository.save(contract)
   }
 
   async find () {
-    return await repository.find()
+    return await this.repository.find()
   }
 
   async findOne (id: number) {
-    return await repository.findOne({
+    return await this.repository.findOne({
       where: { id: id }
     })
   }
 
   async updateWithPartner (id: number, partnerId: number, contract: Contract) {
-    return await repository.update(id, {
+    return await this.repository.update(id, {
       ...contract,
       partnerId: partnerId
     })
   }
 
   async update (id: number, contract: Contract) {
-    return await repository.update(id, contract)
+    return await this.repository.update(id, contract)
   }
 
   async deleteWithPartner (id: number, partnerId: number) {
-    return await repository.delete({
+    return await this.repository.delete({
       partnerId: partnerId,
       id: id
     })
   }
 
   async delete (id: number) {
-    return await repository.delete(id)
+    return await this.repository.delete(id)
   }
 }

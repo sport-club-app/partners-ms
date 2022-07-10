@@ -1,7 +1,8 @@
 import { Contact } from "@/app/core/entity"
-import { entityManager } from "@/infra/db/config"
 import { ContactModel } from "@/infra/models/ContactModel"
 import { IRepositoryDbMethodsBase } from "./RepositoryBase"
+import { Repository } from "typeorm"
+
 export interface IContactRepositoryDbMethods extends Partial<IRepositoryDbMethodsBase<Contact>> {
     findEmail(contacts: Contact[]): Promise<Contact[]>
     saveOneContact(contact: Contact): Promise<Contact>
@@ -9,39 +10,41 @@ export interface IContactRepositoryDbMethods extends Partial<IRepositoryDbMethod
     createMany(contacts: Contact[]): Promise<Contact[]>
 }
 
-const repository = entityManager.getRepository(ContactModel)
-
 export class ContactRepositoryDb implements IContactRepositoryDbMethods {
+  constructor (private repository: Repository<ContactModel>) {
+    this.repository = repository
+  }
+
   async createMany (contacts: Contact[]) {
-    return await repository.save(contacts)
+    return await this.repository.save(contacts)
   }
 
   async find () {
-    return await repository.find()
+    return await this.repository.find()
   }
 
   async findOne (id: number) {
-    return await repository.findOne({ where: { id: id } })
+    return await this.repository.findOne({ where: { id: id } })
   }
 
   async findEmail (contacts: Contact[]) {
     const listEmail = []
     for (const ct of contacts) {
-      const emailExists = await repository.findOne({ where: { email: ct.email } })
+      const emailExists = await this.repository.findOne({ where: { email: ct.email } })
       listEmail.push(emailExists)
     }
     return listEmail[0]
   }
 
   async saveOneContact (contact: Contact) {
-    return await repository.save(contact)
+    return await this.repository.save(contact)
   }
 
   async updateContact (id: number, partnerId: number, contact: Contact) {
-    return await repository.update(id, { ...contact, partnerId: partnerId })
+    return await this.repository.update(id, { ...contact, partnerId: partnerId })
   }
 
   async delete (id: number) {
-    return await repository.delete(id)
+    return await this.repository.delete(id)
   }
 }
