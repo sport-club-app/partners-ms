@@ -1,3 +1,6 @@
+import { APIError } from "@/app/exceptions/base-error"
+import businessError from "@/app/exceptions/business-error"
+import { HttpStatusCode } from "@/app/exceptions/interfaces"
 import { IPartnerRepositoryDbMethods, PartnerRepositoryDb } from "@/app/repository/PartnerRepositoryDb"
 
 export class GetFullRegisterDataPartner {
@@ -7,6 +10,15 @@ export class GetFullRegisterDataPartner {
     }
 
     async execute (id: number, relations: Array<"contacts" | "modalities" | "contracts">) {
-      return this.partnerRepository.findRelationsOne(id, relations)
+      const result = await this.partnerRepository.findRelationsOne(id, relations)
+      if (!result) {
+        throw new APIError("NOT_FOUND",
+          HttpStatusCode.NOT_FOUND,
+          true,
+          businessError.PARTNER_NOT_FOUND,
+          undefined
+        )
+      }
+      return result
     }
 }

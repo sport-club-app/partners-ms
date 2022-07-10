@@ -1,5 +1,8 @@
 import { IModalityRepositoryDbMethods, ModalityRepositoryDb } from "@/app/repository/ModalityRepositoryDb"
 import { Modality } from "@/app/core/entity"
+import { HttpStatusCode } from "@/app/exceptions/interfaces"
+import { APIError } from "@/app/exceptions/base-error"
+import businessError from "@/app/exceptions/business-error"
 
 export class UpdateModality {
     private modalityRepository: IModalityRepositoryDbMethods
@@ -8,6 +11,21 @@ export class UpdateModality {
     }
 
     async execute (id: number, modality: Modality) {
-      return this.modalityRepository.update(id, modality)
+      if (!id) {
+        throw new APIError("NOT_FOUND",
+          HttpStatusCode.NOT_FOUND,
+          true,
+          businessError.MODALITY_NOT_FOUND
+        )
+      }
+      const result = await this.modalityRepository.update(id, modality)
+      if (result.affected == 0) {
+        throw new APIError("NOT_FOUND",
+          HttpStatusCode.NOT_FOUND,
+          true,
+          businessError.MODALITY_NOT_FOUND
+        )
+      }
+      return result
     }
 }

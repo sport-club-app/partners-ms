@@ -1,3 +1,6 @@
+import { APIError } from "@/app/exceptions/base-error"
+import businessError from "@/app/exceptions/business-error"
+import { HttpStatusCode } from "@/app/exceptions/interfaces"
 import { ContactRepositoryDb, IContactRepositoryDbMethods } from "@/app/repository/ContactRepositoryDb"
 
 export class GetAllContacts {
@@ -7,6 +10,15 @@ export class GetAllContacts {
     }
 
     async execute () {
-      return this.contactRepository.find()
+      const result = await this.contactRepository.find()
+      if (!result) {
+        throw new APIError("NOT_FOUND",
+          HttpStatusCode.NOT_FOUND,
+          true,
+          businessError.CONTACT_NOT_FOUND,
+          undefined
+        )
+      }
+      return result
     }
 }

@@ -3,7 +3,7 @@ import { Contract } from "@/app/core/entity"
 import { ModalityModel } from "./ModalityModel"
 import { PartnerModel } from "./PartnerModel"
 
-@Entity()
+@Entity("contracts")
 export class ContractModel implements Contract {
     @PrimaryGeneratedColumn()
     id?: number

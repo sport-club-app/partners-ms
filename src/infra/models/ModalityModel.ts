@@ -2,7 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateCol
 import { Modality } from "@/app/core/entity"
 import { ContractModel } from "./ContractModel"
 
-@Entity()
+@Entity("modalities")
 export class ModalityModel implements Modality {
     @PrimaryGeneratedColumn()
     id?: number

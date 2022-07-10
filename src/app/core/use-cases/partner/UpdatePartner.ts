@@ -1,5 +1,8 @@
 import { IPartnerRepositoryDbMethods, PartnerRepositoryDb } from "@/app/repository/PartnerRepositoryDb"
 import { Partner } from "@/app/core/entity"
+import { APIError } from "@/app/exceptions/base-error"
+import { HttpStatusCode } from "@/app/exceptions/interfaces"
+import businessError from "@/app/exceptions/business-error"
 
 export class UpdatePartner {
     private partnerRepository: IPartnerRepositoryDbMethods
@@ -8,6 +11,21 @@ export class UpdatePartner {
     }
 
     async execute (id: number, partner: Partner) {
-      return this.partnerRepository.update(id, partner)
+      if (!id || !partner) {
+        throw new APIError("NOT_FOUND",
+          HttpStatusCode.NOT_FOUND,
+          true,
+          businessError.PARTNER_NOT_FOUND
+        )
+      }
+      const result = await this.partnerRepository.update(id, partner)
+      if (result.affected == 0) {
+        throw new APIError("NOT_FOUND",
+          HttpStatusCode.NOT_FOUND,
+          true,
+          businessError.PARTNER_NOT_FOUND
+        )
+      }
+      return result
     }
 }

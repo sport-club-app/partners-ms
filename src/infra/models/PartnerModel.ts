@@ -4,7 +4,7 @@ import { ModalityModel } from "./ModalityModel"
 import { ContactModel } from "./ContactModel"
 import { ContractModel } from "./ContractModel"
 
-@Entity()
+@Entity("partners")
 export class PartnerModel implements Partner {
     @PrimaryGeneratedColumn()
     id: number

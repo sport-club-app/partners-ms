@@ -17,7 +17,7 @@ export const server = express()
 server.use(cors())
 server.use(express.json())
 
-server.get(`/${version}/health`, (_, res) => res.send({ message: "partners-ms is running", date: new Date() }))
+server.get(`/${version}/health`, (_, res) => res.send({ message: "partners-ms is running", uptime: new Date() }))
 server.use(`/${version}/docs`, swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 server.get("/", (_, res) => {
   res.redirect(`/${version}/health`)

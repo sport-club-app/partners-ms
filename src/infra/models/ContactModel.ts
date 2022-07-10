@@ -2,7 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, Up
 import { Contact } from "@/app/core/entity"
 import { PartnerModel } from "./PartnerModel"
 
-@Entity()
+@Entity("contacts")
 export class ContactModel implements Contact {
     @PrimaryGeneratedColumn()
     id: number

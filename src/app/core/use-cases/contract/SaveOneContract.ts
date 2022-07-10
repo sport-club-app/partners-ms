@@ -46,6 +46,15 @@ export class SaveOneContract {
         start: start,
         dueDate: dueDate
       }
-      return this.contractRepository.create(dataContract)
+      const result = await this.contractRepository.create(dataContract)
+      if (!result) {
+        throw new APIError("NOT_FOUND",
+          HttpStatusCode.NOT_FOUND,
+          true,
+          businessError.CONTRACT_NOT_FOUND,
+          undefined
+        )
+      }
+      return result
     }
 }

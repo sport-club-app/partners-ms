@@ -1,3 +1,6 @@
+import { APIError } from "@/app/exceptions/base-error"
+import businessError from "@/app/exceptions/business-error"
+import { HttpStatusCode } from "@/app/exceptions/interfaces"
 import { IModalityRepositoryDbMethods, ModalityRepositoryDb } from "@/app/repository/ModalityRepositoryDb"
 
 export class DeleteModality {
@@ -7,6 +10,21 @@ export class DeleteModality {
     }
 
     async execute (id: number) {
-      return this.modalityRepository.delete(id)
+      if (!id) {
+        throw new APIError("NOT_FOUND",
+          HttpStatusCode.NOT_FOUND,
+          true,
+          businessError.MODALITY_NOT_FOUND,
+          undefined
+        )
+      }
+      const result = await this.modalityRepository.delete(id)
+      if (result.affected == 0) {
+        throw new APIError("NOT_FOUND",
+          HttpStatusCode.NOT_FOUND,
+          true,
+          businessError.MODALITY_NOT_FOUND
+        )
+      }
     }
 }
