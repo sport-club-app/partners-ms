@@ -8,6 +8,7 @@
   },
   "scripts": {
     "test:cov": "jest ./__test__/unit/** && npx lite-server",
+    "test:file": "./test_file.sh",
     "test:watch": "jest --watch",
     "test": "jest --detectOpenHandles --forceExit",
     "test:unit": "jest --forceExit ./__test__/unit/**",
