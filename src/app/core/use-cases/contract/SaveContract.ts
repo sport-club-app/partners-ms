@@ -13,7 +13,7 @@ export class SaveContract {
         throw new APIError("BAD_REQUEST",
           HttpStatusCode.BAD_REQUEST,
           true,
-          businessError.MODALITY_NOT_FOUND
+          businessError.GENERIC
         )
       }
       const dataContract = modalities.map(modality => {
@@ -23,14 +23,6 @@ export class SaveContract {
           partnerId: partnerId
         }
       })
-      const contractSaved = await this.contractRepository.create(dataContract)
-      if (!contractSaved) {
-        throw new APIError("BAD_REQUEST",
-          HttpStatusCode.BAD_REQUEST,
-          true,
-          businessError.CONTRACT_NOT_FOUND
-        )
-      }
-      return contractSaved
+      return await this.contractRepository.create(dataContract)
     }
 }

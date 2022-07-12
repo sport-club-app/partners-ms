@@ -1,5 +1,8 @@
 
 import { Contract, Partner, Modality, Contact } from "@/app/core/entity"
+import { APIError } from "../exceptions/base-error"
+import businessError from "../exceptions/business-error"
+import { HttpStatusCode } from "../exceptions/interfaces"
 
 export interface ISavePartnersDTOResponse{
   partner: {

@@ -11,15 +11,13 @@ export class SavePartner {
     }
 
     async execute (partner: Partner) {
-      const partnerSaved = await this.partnerRepository.create(partner)
-      if (!partnerSaved) {
+      if (!partner) {
         throw new APIError("BAD_REQUEST",
           HttpStatusCode.BAD_REQUEST,
           true,
-          businessError.PARTNER_NOT_FOUND,
-          undefined
+          businessError.GENERIC
         )
       }
-      return partnerSaved
+      return await this.partnerRepository.create(partner)
     }
 }

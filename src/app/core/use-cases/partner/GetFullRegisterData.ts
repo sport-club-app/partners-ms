@@ -9,16 +9,15 @@ export class GetFullRegisterDataPartner {
       this.partnerRepository = partnerRepository
     }
 
-    async execute (id: number, relations: Array<"contacts" | "modalities" | "contracts">) {
-      const result = await this.partnerRepository.findRelationsOne(id, relations)
-      if (!result) {
-        throw new APIError("NOT_FOUND",
-          HttpStatusCode.NOT_FOUND,
+    async execute (partnerId: number, relations: Array<"contacts" | "modalities" | "contracts">) {
+      if (!partnerId) {
+        throw new APIError("BAD_REQUEST",
+          HttpStatusCode.BAD_REQUEST,
           true,
-          businessError.PARTNER_NOT_FOUND,
+          businessError.GENERIC,
           undefined
         )
       }
-      return result
+      return await this.partnerRepository.findRelationsOne(partnerId, relations)
     }
 }

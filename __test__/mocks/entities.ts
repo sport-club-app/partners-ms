@@ -36,7 +36,8 @@ export default {
       id: 123,
       name: "joao",
       surname: "da silva",
-      birthDate: new Date("1990-02-24")
+      birthDate: new Date("1990-02-24"),
+      createdAt: new Date()
     } as Partner
   }
 }

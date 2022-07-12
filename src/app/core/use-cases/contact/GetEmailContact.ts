@@ -11,14 +11,13 @@ export class GetEmailContact {
     }
 
     async execute (contact: Contact[]) {
-      const email = await this.contactRepository.findEmail(contact)
-      if (email) {
+      if (!contact) {
         throw new APIError("BAD_REQUEST",
           HttpStatusCode.BAD_REQUEST,
           true,
           businessError.EMAIL_EXISTS
         )
       }
-      return email
+      return await this.contactRepository.findEmail(contact)
     }
 }

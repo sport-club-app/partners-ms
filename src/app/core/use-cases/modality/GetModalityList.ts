@@ -11,18 +11,17 @@ export class GetModalityList {
     }
 
     async execute (modalities: Modality[]) {
+      if (!modalities) {
+        throw new APIError("BAD_REQUEST",
+          HttpStatusCode.BAD_REQUEST,
+          true,
+          businessError.GENERIC
+        )
+      }
       const modalitiesList = []
       for (const md of modalities) {
         const result = await this.modalityRepository.findOne(md.id)
         modalitiesList.push(result)
-      }
-      if (modalitiesList.length == 0) {
-        throw new APIError("BAD_REQUEST",
-          HttpStatusCode.BAD_REQUEST,
-          true,
-          businessError.MODALITY_NOT_FOUND,
-          undefined
-        )
       }
       return modalitiesList
     }

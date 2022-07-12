@@ -11,15 +11,13 @@ export class SaveContact {
     }
 
     async execute (contact: Contact) {
-      const contactSaved = await this.contactRepository.saveOneContact(contact)
-      if (!contactSaved) {
+      if (!contact) {
         throw new APIError("BAD_REQUEST",
           HttpStatusCode.BAD_REQUEST,
           true,
-          businessError.CONTACT_NOT_CREATED,
-          { service: SaveContact.name, repositoy: "contactRepository.saveOneContact" }
+          businessError.GENERIC
         )
       }
-      return contactSaved
+      return await this.contactRepository.saveOneContact(contact)
     }
 }

@@ -30,7 +30,7 @@ class RegisterController {
       const contract = await saveContractUseCase.execute(req.body.modalities, partner.id)
 
       const resultformatData = SavePartnersDTOResponse.execute(partner, contract)
-      return res.status(201).json(resultformatData)
+      return res.status(201).send(resultformatData)
     } catch (error) {
       return errorHandlerMiddleware.returnError(error, req, res, next)
     }

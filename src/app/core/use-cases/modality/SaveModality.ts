@@ -11,15 +11,13 @@ export class SaveModality {
     }
 
     async execute (modalities: Modality[]) {
-      const modalitiesSaved = await this.modalityRepository.createMany(modalities)
-      if (!modalitiesSaved) {
+      if (!modalities) {
         throw new APIError("BAD_REQUEST",
           HttpStatusCode.BAD_REQUEST,
           true,
-          businessError.MODALITY_NOT_FOUND,
-          undefined
+          businessError.GENERIC
         )
       }
-      return modalitiesSaved
+      return await this.modalityRepository.createMany(modalities)
     }
 }
