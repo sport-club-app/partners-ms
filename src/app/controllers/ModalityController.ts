@@ -44,7 +44,7 @@ class ModalityController {
     const id = req.params.id
     try {
       const result = await updateModalityUseCase.execute(Number(id), data)
-      return res.status(201).send(result)
+      return res.status(204).send(result)
     } catch (error) {
       return errorHandlerMiddleware.returnError(error, req, res, next)
     }

@@ -12,7 +12,7 @@ export class SaveModality {
 
     async execute (modalities: Modality[]) {
       const modalitiesSaved = await this.modalityRepository.createMany(modalities)
-      if (modalitiesSaved.length == 0) {
+      if (!modalitiesSaved) {
         throw new APIError("BAD_REQUEST",
           HttpStatusCode.BAD_REQUEST,
           true,
