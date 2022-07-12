@@ -11,19 +11,11 @@ export class UpdateOneContact {
     }
 
     async execute (id: number, partnerId: number, contact: Contact) {
-      if (!contact) {
+      if (!contact || !id || !partnerId) {
         throw new APIError("BAD_REQUEST",
           HttpStatusCode.BAD_REQUEST,
           true,
           businessError.GENERIC,
-          undefined
-        )
-      }
-      if (!partnerId) {
-        throw new APIError("NOT_FOUND",
-          HttpStatusCode.NOT_FOUND,
-          true,
-          businessError.PARTNER_NOT_FOUND,
           undefined
         )
       }
