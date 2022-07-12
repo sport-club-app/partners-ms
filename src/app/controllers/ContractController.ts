@@ -26,7 +26,7 @@ class ContractController {
     const contract: Contract = req.body
     try {
       const result = await updateContractStatusUseCase.execute(Number(req.params.id), contract.partnerId, contract)
-      return res.status(201).send(result)
+      return res.status(204).send(result)
     } catch (error) {
       return errorHandlerMiddleware.returnError(error, req, res, next)
     }

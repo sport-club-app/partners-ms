@@ -11,10 +11,10 @@ export class DeleteContract {
 
     async execute (id: number, partnerId: number) {
       if (!partnerId) {
-        throw new APIError("NOT_FOUND",
-          HttpStatusCode.NOT_FOUND,
+        throw new APIError("BAD_REQUEST",
+          HttpStatusCode.BAD_REQUEST,
           true,
-          businessError.CONTRACT_NOT_FOUND,
+          businessError.GENERIC,
           undefined
         )
       }

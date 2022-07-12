@@ -12,9 +12,9 @@ export class SaveOneContract {
     }
 
     async execute (contract: Contract) {
-      if (!contract.status) return !contract.status
+      if (!contract.status) return !!contract.status
       if (!contract.dueDate) {
-        return new APIError("BAD_REQUEST",
+        throw new APIError("BAD_REQUEST",
           HttpStatusCode.BAD_REQUEST,
           true,
           businessError.GENERIC,
@@ -36,7 +36,17 @@ export class SaveOneContract {
           start: resultCalcStartDate == 1 ? endDateSubMonth : start,
           dueDate: resultCalcDueDate == 1 ? startDateAddMonth : end
         }
-        return this.contractRepository.create(dataContract)
+        const result = await this.contractRepository.create(dataContract)
+        if (!result) {
+          throw new APIError("NOT_FOUND",
+            HttpStatusCode.NOT_FOUND,
+            true,
+            businessError.CONTRACT_NOT_FOUND,
+            undefined
+          )
+        }
+
+        return result
       }
       const start = parseISO(String(contract.start))
       let dueDate = addMonths(parseISO(String(contract.start)), 1)
