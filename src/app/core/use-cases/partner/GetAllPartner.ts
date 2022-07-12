@@ -10,14 +10,6 @@ export class GetAllPartner {
     }
 
     async execute () {
-      const result = await this.partnerRepository.find()
-      if (!result) {
-        throw new APIError("NOT_FOUND",
-          HttpStatusCode.NOT_FOUND,
-          true,
-          businessError.PARTNER_NOT_FOUND
-        )
-      }
-      return result
+      return await this.partnerRepository.find()
     }
 }

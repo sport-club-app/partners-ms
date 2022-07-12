@@ -25,6 +25,10 @@ export class PartnerRepositoryDb implements IPartnerRepositoryDbMethods {
     return await this.repository.find()
   }
 
+  async find () {
+    return await this.repository.find()
+  }
+
   async findOne (id: number) {
     return await this.repository.findOne({ where: { id: id } })
   }

@@ -18,14 +18,6 @@ export class UpdatePartner {
           businessError.PARTNER_NOT_FOUND
         )
       }
-      const result = await this.partnerRepository.update(id, partner)
-      if (result.affected == 0) {
-        throw new APIError("NOT_FOUND",
-          HttpStatusCode.NOT_FOUND,
-          true,
-          businessError.PARTNER_NOT_FOUND
-        )
-      }
-      return result
+      return await this.partnerRepository.update(id, partner)
     }
 }

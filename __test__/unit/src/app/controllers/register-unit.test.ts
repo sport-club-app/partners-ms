@@ -18,18 +18,11 @@ import { PartnerRepositoryDb } from "@/app/repository/PartnerRepositoryDb"
 import { ContractRepositoryDb } from "@/app/repository/ContractRepositoryDb"
 import { ModalityModel } from "@/infra/models/ModalityModel"
 import EntityMock from "../../../../mocks/entities"
-import { Partner } from "@/app/core/entity"
 import { ContractModel } from "@/infra/models/ContractModel"
 
-// jest.mock("@/app/core/use-cases/contact")
 jest.mock("@/app/core/use-cases/modality")
-// jest.mock("@/app/core/use-cases/contract/SaveContract")
-// jest.mock("@/app/core/use-cases/contract/SaveOneContract")
-// jest.mock("@/app/core/use-cases/partner")
+
 jest.mock("@/app/repository/ModalityRepositoryDb")
-// jest.mock("@/app/repository/PartnerRepositoryDb")
-// jest.mock("@/app/repository/ContactRepositoryDb")
-// jest.mock("@/app/repository/ContractRepositoryDb")
 
 jest.mock("@/app/core/use-cases/notification/ProducerNotification")
 

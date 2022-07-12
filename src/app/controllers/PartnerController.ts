@@ -26,7 +26,7 @@ class PartnerController {
     const id = req.params.id
     try {
       const result = await updatePartnerPartnerUseCase.execute(Number(id), data)
-      return res.status(200).send(result)
+      return res.status(204).send(result)
     } catch (error) {
       return errorHandlerMiddleware.returnError(error, req, res, next)
     }
@@ -55,7 +55,7 @@ class PartnerController {
     const id = req.params.id
     try {
       const result = await deletePartnerPartnerUseCase.execute(Number(id))
-      return res.status(200).send(result)
+      return res.status(204).send(result)
     } catch (error) {
       return errorHandlerMiddleware.returnError(error, req, res, next)
     }

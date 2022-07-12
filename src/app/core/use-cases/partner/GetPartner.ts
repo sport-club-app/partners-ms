@@ -17,14 +17,6 @@ export class GetPartner {
           businessError.GENERIC
         )
       }
-      const result = await this.partnerRepository.findOne(id)
-      if (!result) {
-        throw new APIError("NOT_FOUND",
-          HttpStatusCode.NOT_FOUND,
-          true,
-          businessError.PARTNER_NOT_FOUND
-        )
-      }
-      return result
+      return await this.partnerRepository.findOne(id)
     }
 }
