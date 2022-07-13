@@ -9,7 +9,7 @@ jest.mock("express", () => {
   return require("jest-express")
 })
 
-describe("Name of the group", () => {
+describe("Testes de unidade serverConfig", () => {
   it("Deve validar asinaturas de rotas", () => {
     expect(router.get).toBeDefined()
   })

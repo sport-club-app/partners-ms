@@ -11,7 +11,7 @@ import Entity from "../../../../mocks/entities"
 const RepositoryMock = entityManager.getRepository(ModalityModel) as jest.Mock<Repository<ModalityModel>>
 const repositoryMock = RepositoryMock as jest.Mocked<Repository<ModalityModel>>
 
-const repository = new ModalityRepositoryDb()
+const repository = new ModalityRepositoryDb(repositoryMock)
 
 describe("Testes unitários de Repositorio de modalidades", () => {
   beforeEach(() => {

@@ -11,7 +11,7 @@ import Entity from "../../../../mocks/entities"
 const RepositoryMock = entityManager.getRepository(ContractModel) as jest.Mock<Repository<ContractModel>>
 const repositoryMock = RepositoryMock as jest.Mocked<Repository<ContractModel>>
 
-const repository = new ContractRepositoryDb()
+const repository = new ContractRepositoryDb(repositoryMock)
 
 describe("Testes unitários de Repositorio de contratos", () => {
   beforeEach(() => {

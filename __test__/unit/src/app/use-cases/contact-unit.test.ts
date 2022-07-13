@@ -47,8 +47,18 @@ describe("Testes de unidade contact-useCase", () => {
 
   describe("Testes de unidade saveOneContact", () => {
     it("Não deve salvar um registro caso o endereço seja omitido", async () => {
-      jest.spyOn(saveContact, "execute").mockResolvedValueOnce(null)
-      jest.spyOn(repository, "saveOneContact").mockResolvedValueOnce(null)
+      jest.spyOn(saveContact, "execute").mockRejectedValueOnce(new APIError("BAD_REQUEST",
+        HttpStatusCode.BAD_REQUEST,
+        true,
+        businessError.GENERIC
+      ))
+      jest.spyOn(repository, "saveOneContact").mockRejectedValueOnce(
+        new APIError("BAD_REQUEST",
+          HttpStatusCode.BAD_REQUEST,
+          true,
+          businessError.GENERIC
+        )
+      )
       jest.spyOn(repositoryMock, "save").mockRejectedValueOnce(
         new APIError("BAD_REQUEST",
           HttpStatusCode.BAD_REQUEST,

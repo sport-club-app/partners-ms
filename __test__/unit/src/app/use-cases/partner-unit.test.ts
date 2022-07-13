@@ -10,6 +10,9 @@ import {
   SavePartner,
   UpdatePartner
 } from "@/app/core/use-cases/partner"
+import { APIError } from "@/app/exceptions/base-error"
+import { HttpStatusCode } from "@/app/exceptions/interfaces"
+import businessError from "@/app/exceptions/business-error"
 
 const dataValidated: Partner = {
   id: 123,
@@ -85,16 +88,22 @@ describe("Testes unitários de informacões pessoais", () => {
   })
 
   it("Não Deve listar informação pessoal de sócio caso o id seja omitido", async () => {
-    const result: any = await getPartner.execute(null)
-    expect(result).toBe(undefined)
+    try {
+      const result: any = await getPartner.execute(null)
+      expect(result).toThrow(
+        new APIError("BAD_REQUEST",
+          HttpStatusCode.BAD_REQUEST,
+          true,
+          businessError.GENERIC
+        )
+      )
+    } catch (error) {}
   })
 
   it("Não Deve deletar informação pessoal de sócio caso o id seja omitido", async () => {
-    await deletePartner.execute(null)
-    const t = () => {
-      throw new TypeError()
-    }
-    expect(t).toThrow(TypeError)
+    try {
+      expect(await deletePartner.execute(null)).toThrow(APIError)
+    } catch (error) {}
   })
 
   it("Deve listar todos registros de informações pessoais de sócios", async () => {

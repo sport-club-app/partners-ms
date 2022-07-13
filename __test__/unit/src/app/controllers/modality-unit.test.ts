@@ -29,17 +29,32 @@ describe("Testes unitário ModalityController", () => {
     jest.resetAllMocks()
   })
   describe("Testes de unidade metodo saveModality", () => {
-    it("deve retornar statusCode 400 caso nao seja salvo uma modalidade", async () => {
+    it("deve retornar statusCode 400 caso nao seja passado uma modalidade", async () => {
       const req = {
-        body: {
-          name: "futebol",
-          description: "esporte"
-        }
+        body: {}
       } as any
       const modality = EntityMock.getModality()
-      jest.spyOn(saveModality, "execute").mockResolvedValueOnce(req.body)
-      jest.spyOn(modalityRepository, "createMany").mockResolvedValueOnce(req.body)
-      jest.spyOn(repositoryMock, "save").mockResolvedValueOnce(null)
+      jest.spyOn(saveModality, "execute").mockRejectedValueOnce(
+        new APIError("BAD_REQUEST",
+          HttpStatusCode.BAD_REQUEST,
+          true,
+          businessError.GENERIC
+        )
+      )
+      jest.spyOn(modalityRepository, "createMany").mockRejectedValueOnce(
+        new APIError("BAD_REQUEST",
+          HttpStatusCode.BAD_REQUEST,
+          true,
+          businessError.GENERIC
+        )
+      )
+      jest.spyOn(repositoryMock, "save").mockRejectedValueOnce(
+        new APIError("BAD_REQUEST",
+          HttpStatusCode.BAD_REQUEST,
+          true,
+          businessError.GENERIC
+        )
+      )
       await ModalityController.saveModality(req, res, next)
       expect(res.status).toBeCalledWith(400)
       expect(res.send).toBeCalledWith(

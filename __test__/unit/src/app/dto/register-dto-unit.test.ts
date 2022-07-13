@@ -1,8 +1,8 @@
 import { SavePartnersDTOResponse } from "@/app/dto/register-dto"
 import { Contract, Partner, Modality, Contact } from "@/app/core/entity"
 
-describe("Name of the group", () => {
-  it("should", () => {
+describe("Testes de unidade register-dto", () => {
+  it("Deve retornar um register-dto", () => {
     const partner: Partner = {
       id: 123,
       name: "joao",
@@ -35,8 +35,7 @@ describe("Name of the group", () => {
       modalities: modalities,
       contracts: contract
     }
-    const savePartnersDTOResponse = new SavePartnersDTOResponse()
-    const called = savePartnersDTOResponse.execute(partner, contract)
+    const called = SavePartnersDTOResponse.execute(partner, contract)
     // expect(called).resolves.toBe(savePartnersDTOResponseData)
   })
 })

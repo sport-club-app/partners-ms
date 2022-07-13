@@ -10,6 +10,7 @@ import { APIError } from "@/app/exceptions/base-error"
 import { HttpStatusCode } from "@/app/exceptions/interfaces"
 import businessError from "@/app/exceptions/business-error"
 
+jest.mock("@/infra/services/kafka/config")
 jest.mock("@/app/core/use-cases/notification/ProducerNotification")
 
 const RepositoryMock = entityManager.getRepository(ContactModel)
@@ -54,13 +55,34 @@ describe("Testes de unidade ContactController", () => {
 
     it("Deve retornar statusCode 400 + error caso nao seja passado nenhum dado", async () => {
       const req = { body: {} } as any
+      jest.spyOn(saveOneContact, "execute").mockRejectedValueOnce(
+        new APIError("BAD_REQUEST",
+          HttpStatusCode.BAD_REQUEST,
+          true,
+          businessError.GENERIC
+        )
+      )
+      jest.spyOn(contactRepository, "saveOneContact").mockRejectedValueOnce(
+        new APIError("BAD_REQUEST",
+          HttpStatusCode.BAD_REQUEST,
+          true,
+          businessError.GENERIC
+        )
+      )
+      jest.spyOn(repositoryMock, "save").mockRejectedValueOnce(
+        new APIError("BAD_REQUEST",
+          HttpStatusCode.BAD_REQUEST,
+          true,
+          businessError.GENERIC
+        )
+      )
       await ContactController.saveOneContact(req, res, next)
       expect(res.status).toBeCalledWith(400)
       expect(res.send).toBeCalledWith(
         new APIError("BAD_REQUEST",
           HttpStatusCode.BAD_REQUEST,
           true,
-          businessError.CONTACT_NOT_CREATED
+          businessError.GENERIC
         )
       )
     })

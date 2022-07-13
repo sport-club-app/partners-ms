@@ -8,10 +8,10 @@ import Entity from "../../../../mocks/entities"
 
 // jest.mock("@/app/repository/ContactRepositoryDb")
 
-const RepositoryMock = entityManager.getRepository(ContactModel) as jest.Mock<Repository<ContactModel>>
+const RepositoryMock = entityManager.getRepository(ContactModel)
 const repositoryMock = RepositoryMock as jest.Mocked<Repository<ContactModel>>
 
-const repository = new ContactRepositoryDb()
+const repository = new ContactRepositoryDb(repositoryMock)
 
 describe("Testes unitários de Repositorio de contatos", () => {
   beforeEach(() => {
@@ -31,12 +31,12 @@ describe("Testes unitários de Repositorio de contatos", () => {
 
   it("Deve retornar o primeiro email da lista de emails", async () => {
     const contacts = Entity.getContact()
-    const spy = jest.spyOn(repositoryMock, "find")
+    const spy = jest.spyOn(repositoryMock, "findOne")
     spy.mockReturnValue("email@teste.com")
     const getEmail = await repository.findEmail([contacts])
     expect(getEmail).toEqual("email@teste.com")
-    expect(repositoryMock.find).toBeCalledTimes(1)
-    expect(repositoryMock.find()).toBe("email@teste.com")
+    expect(repositoryMock.findOne).toBeCalledTimes(1)
+    expect(repositoryMock.findOne()).toBe("email@teste.com")
     spy.mockRestore()
   })
 
