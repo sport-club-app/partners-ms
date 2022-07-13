@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from "express"
 import { contactFactory } from "@/app/factories/contact-factory"
 import { Contact } from "@/app/core/entity"
 import { errorHandlerMiddleware } from "@/app/middleware/error-handler"
+import { HttpStatusCode } from "@/app/exceptions/interfaces"
 
 const {
   deleteContactUseCase,
@@ -19,7 +20,7 @@ class ContractController {
     try {
       const result = await saveContactUseCase.execute(data)
       await producerNotification.execute(JSON.stringify(result), "partners-ms-notification")
-      return res.status(201).send(result)
+      return res.status(HttpStatusCode.CREATED).send(result)
     } catch (error) {
       return errorHandlerMiddleware.returnError(error, req, res, next)
     }
@@ -28,7 +29,7 @@ class ContractController {
   async getContact (req: Request, res: Response, next: NextFunction) {
     try {
       const result = await getContactUseCase.execute(Number(req.params.id))
-      return res.status(200).send(result)
+      return res.status(HttpStatusCode.OK).send(result)
     } catch (error) {
       return errorHandlerMiddleware.returnError(error, req, res, next)
     }
@@ -37,7 +38,7 @@ class ContractController {
   async getAllContacts (req: Request, res: Response, next: NextFunction) {
     try {
       const result = await getAllContacts.execute()
-      return res.status(200).send(result)
+      return res.status(HttpStatusCode.OK).send(result)
     } catch (error) {
       return errorHandlerMiddleware.returnError(error, req, res, next)
     }
@@ -52,7 +53,7 @@ class ContractController {
         contact
       )
       await producerNotification.execute(JSON.stringify(result), "partners-ms-notification")
-      return res.status(201).send(result)
+      return res.status(HttpStatusCode.CREATED).send(result)
     } catch (error) {
       return errorHandlerMiddleware.returnError(error, req, res, next)
     }
@@ -62,7 +63,7 @@ class ContractController {
     const id = req.params.id
     try {
       const result = await deleteContactUseCase.execute(Number(id))
-      return res.status(204).send(result)
+      return res.status(HttpStatusCode.NO_CONTENT).send(result)
     } catch (error) {
       return errorHandlerMiddleware.returnError(error, req, res, next)
     }

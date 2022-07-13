@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from "express"
 import { Partner } from "@/app/core/entity"
 import { partnerFactory } from "@/app/factories/partner-factory"
 import { errorHandlerMiddleware } from "@/app/middleware/error-handler"
+import { HttpStatusCode } from "@/app/exceptions/interfaces"
 const {
   deletePartnerPartnerUseCase,
   getAllPartnerPartnerUseCase,
@@ -15,7 +16,7 @@ class PartnerController {
     const data: Partner = req.body
     try {
       const result = await savePartnerUseCase.execute(data)
-      return res.status(201).send(result)
+      return res.status(HttpStatusCode.CREATED).send(result)
     } catch (error) {
       return errorHandlerMiddleware.returnError(error, req, res, next)
     }
@@ -26,7 +27,7 @@ class PartnerController {
     const id = req.params.id
     try {
       const result = await updatePartnerPartnerUseCase.execute(Number(id), data)
-      return res.status(204).send(result)
+      return res.status(HttpStatusCode.NO_CONTENT).send(result)
     } catch (error) {
       return errorHandlerMiddleware.returnError(error, req, res, next)
     }
@@ -36,7 +37,7 @@ class PartnerController {
     const id = req.params.id
     try {
       const result = await getPartnerPartnerUseCase.execute(Number(id))
-      return res.status(200).send(result)
+      return res.status(HttpStatusCode.OK).send(result)
     } catch (error) {
       return errorHandlerMiddleware.returnError(error, req, res, next)
     }
@@ -45,7 +46,7 @@ class PartnerController {
   async getAllPartners (req: Request, res: Response, next: NextFunction) {
     try {
       const result = await getAllPartnerPartnerUseCase.execute()
-      return res.status(200).send(result)
+      return res.status(HttpStatusCode.OK).send(result)
     } catch (error) {
       return errorHandlerMiddleware.returnError(error, req, res, next)
     }
@@ -55,7 +56,7 @@ class PartnerController {
     const id = req.params.id
     try {
       const result = await deletePartnerPartnerUseCase.execute(Number(id))
-      return res.status(204).send(result)
+      return res.status(HttpStatusCode.NO_CONTENT).send(result)
     } catch (error) {
       return errorHandlerMiddleware.returnError(error, req, res, next)
     }

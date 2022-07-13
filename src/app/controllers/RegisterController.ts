@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from "express"
 import { registerFactory } from "@/app/factories/register-factory"
 import { errorHandlerMiddleware } from "@/app/middleware/error-handler"
 import { SavePartnersDTOResponse } from "@/app/dto/register-dto"
-
+import { HttpStatusCode } from "@/app/exceptions/interfaces"
 const {
   getContactUseCase,
   getFullRegisterDataPartner,
@@ -30,7 +30,7 @@ class RegisterController {
       const contract = await saveContractUseCase.execute(req.body.modalities, partner.id)
 
       const resultformatData = SavePartnersDTOResponse.execute(partner, contract)
-      return res.status(201).send(resultformatData)
+      return res.status(HttpStatusCode.CREATED).send(resultformatData)
     } catch (error) {
       return errorHandlerMiddleware.returnError(error, req, res, next)
     }
@@ -42,7 +42,7 @@ class RegisterController {
         Number(req.params.partnerId),
         ["contacts", "modalities", "contracts"]
       )
-      return res.status(200).send(result)
+      return res.status(HttpStatusCode.OK).send(result)
     } catch (error) {
       return errorHandlerMiddleware.returnError(error, req, res, next)
     }
