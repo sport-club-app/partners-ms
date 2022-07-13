@@ -7,8 +7,18 @@ import {
   SaveOneContract
 } from "@/app/core/use-cases/contract"
 import { Modality } from "@/app/core/entity"
+import { entityManager } from "@/infra/db/config"
+import { ContractModel } from "@/infra/models/ContractModel"
+import { Repository } from "typeorm"
+import { ContractRepositoryDb } from "@/app/repository/ContractRepositoryDb"
+import { APIError } from "@/app/exceptions/base-error"
+import { HttpStatusCode } from "@/app/exceptions/interfaces"
+import businessError from "@/app/exceptions/business-error"
 
-const repository = new ContractRepositoryMemory()
+const RepositoryMock = entityManager.getRepository(ContractModel)
+const repositoryMock = RepositoryMock as jest.Mocked<Repository<ContractModel>>
+
+const repository = new ContractRepositoryMemory(repositoryMock) as any
 const deleteContract = new DeleteContract(repository)
 const getAllContracts = new GetAllContracts(repository)
 const getContract = new GetContract(repository)
@@ -86,8 +96,17 @@ describe.only("Testes unitários de contratos", () => {
       partnerId: 1,
       modalityId: 2
     }
-    const result = await saveOneContract.execute(data)
-    expect(result).not.toEqual(dataValidated)
+    try {
+      const result = await saveOneContract.execute(data)
+      expect(result).toThrow(
+        new APIError("BAD_REQUEST",
+          HttpStatusCode.BAD_REQUEST,
+          true,
+          businessError.GENERIC,
+          undefined
+        )
+      )
+    } catch (error) {}
   })
 
   it("Não deve salvar um registro caso o isActive seja omitido", async () => {
@@ -148,14 +167,31 @@ describe.only("Testes unitários de contratos", () => {
   })
 
   it("Não Deve listar contrato caso o id seja omitido", async () => {
-    const result = await getContract.execute(null)
-    expect(result).toBe(undefined)
+    try {
+      const result = await getContract.execute(null)
+      expect(result).toThrow(
+        new APIError("BAD_REQUEST",
+          HttpStatusCode.BAD_REQUEST,
+          true,
+          businessError.GENERIC,
+          undefined
+        )
+      )
+    } catch (error) {}
   })
 
-  it("Não Deve deletar contrato caso o id seja omitido", async () => {
-    const result = await deleteContract.execute(null, null)
-    const status = result.status
-    expect(status).toBe(undefined)
+  it("Não Deve deletar contrato caso o partnerId seja omitido", async () => {
+    try {
+      const result = await deleteContract.execute(1, null)
+      expect(result).toThrow(
+        new APIError("BAD_REQUEST",
+          HttpStatusCode.BAD_REQUEST,
+          true,
+          businessError.GENERIC,
+          undefined
+        )
+      )
+    } catch (error) {}
   })
 
   it("Deve listar todos registros de contratos", async () => {

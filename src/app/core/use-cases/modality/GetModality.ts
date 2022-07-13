@@ -17,14 +17,6 @@ export class GetModality {
           businessError.GENERIC
         )
       }
-      const result = await this.modalityRepository.findOne(id)
-      if (!result) {
-        throw new APIError("NOT_FOUND",
-          HttpStatusCode.NOT_FOUND,
-          true,
-          businessError.MODALITY_NOT_FOUND
-        )
-      }
-      return result
+      return await this.modalityRepository.findOne(id)
     }
 }

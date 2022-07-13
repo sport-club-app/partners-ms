@@ -36,17 +36,7 @@ export class SaveOneContract {
           start: resultCalcStartDate == 1 ? endDateSubMonth : start,
           dueDate: resultCalcDueDate == 1 ? startDateAddMonth : end
         }
-        const result = await this.contractRepository.create(dataContract)
-        if (!result) {
-          throw new APIError("NOT_FOUND",
-            HttpStatusCode.NOT_FOUND,
-            true,
-            businessError.CONTRACT_NOT_FOUND,
-            undefined
-          )
-        }
-
-        return result
+        return await this.contractRepository.create(dataContract)
       }
       const start = parseISO(String(contract.start))
       let dueDate = addMonths(parseISO(String(contract.start)), 1)
@@ -56,15 +46,6 @@ export class SaveOneContract {
         start: start,
         dueDate: dueDate
       }
-      const result = await this.contractRepository.create(dataContract)
-      if (!result) {
-        throw new APIError("NOT_FOUND",
-          HttpStatusCode.NOT_FOUND,
-          true,
-          businessError.CONTRACT_NOT_FOUND,
-          undefined
-        )
-      }
-      return result
+      return await this.contractRepository.create(dataContract)
     }
 }

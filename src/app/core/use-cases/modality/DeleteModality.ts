@@ -14,18 +14,9 @@ export class DeleteModality {
         throw new APIError("NOT_FOUND",
           HttpStatusCode.NOT_FOUND,
           true,
-          businessError.MODALITY_NOT_FOUND,
-          undefined
-        )
-      }
-      const result = await this.modalityRepository.delete(id)
-      if (!result) {
-        throw new APIError("NOT_FOUND",
-          HttpStatusCode.NOT_FOUND,
-          true,
           businessError.MODALITY_NOT_FOUND
         )
       }
-      return result
+      return await this.modalityRepository.delete(id)
     }
 }

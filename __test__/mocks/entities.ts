@@ -5,7 +5,7 @@ export default {
     return {
       id: 123,
       address: "endereco 1",
-      email: "email@email",
+      email: "email@email.com",
       phone: 9999334455,
       partnerId: 2
     } as Contact

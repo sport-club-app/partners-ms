@@ -1,6 +1,7 @@
 import { Contract } from "@/app/core/entity"
-import { UpdateResult } from "typeorm"
+import { Repository, UpdateResult } from "typeorm"
 import { IRepositoryDbMethodsBase } from "@/app/repository/RepositoryBase"
+import { ContractModel } from "@/infra/models/ContractModel"
 
 export interface IContractRepositoryDbMethods
     extends IRepositoryDbMethodsBase<Contract> {
@@ -14,6 +15,10 @@ export interface IContractRepositoryDbMethods
 
 const contractList: Contract[] = []
 export class ContractRepositoryMemory implements Partial<IContractRepositoryDbMethods> {
+  constructor (private repository: Repository<ContractModel>) {
+    this.repository = repository
+  }
+
   async save (contract: Contract) {
     return Promise.resolve().then(() => {
       contract.id = Math.floor(Math.random() * 1000)

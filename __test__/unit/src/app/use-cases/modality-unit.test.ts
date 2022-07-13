@@ -9,6 +9,10 @@ import {
   SaveModality,
   UpdateModality
 } from "@/app/core/use-cases/modality"
+import { APIError } from "@/app/exceptions/base-error"
+import { HttpStatusCode } from "@/app/exceptions/interfaces"
+import businessError from "@/app/exceptions/business-error"
+import { UpdateResult } from "typeorm"
 
 const repository = new ModalityRepositoryMemory()
 
@@ -51,8 +55,16 @@ describe("Testes unitários de modalidades", () => {
       name: null,
       description: "esporte"
     }
-    const result = await saveModality.execute(data)
-    expect(result).not.toEqual(dataValidated)
+    try {
+      const result = await saveModality.execute(null)
+      expect(result).toThrow(
+        new APIError("BAD_REQUEST",
+          HttpStatusCode.BAD_REQUEST,
+          true,
+          businessError.GENERIC
+        )
+      )
+    } catch (error) {}
   })
 
   it("Deve salvar um registro caso todos dados obrigátorios sejam passados", async () => {
@@ -61,16 +73,27 @@ describe("Testes unitários de modalidades", () => {
   })
 
   it("Não Deve listar modalidade caso o id seja omitido", async () => {
-    const result = await getModality.execute(null)
-    expect(result).toBe(undefined)
+    try {
+      const result = await getModality.execute(null)
+      expect(result).toThrow(
+        new APIError("NOT_FOUND",
+          HttpStatusCode.NOT_FOUND,
+          true,
+          businessError.MODALITY_NOT_FOUND
+        ))
+    } catch (error) {}
   })
 
   it("Não Deve deletar modalidade caso o id seja omitido", async () => {
-    await deleteModality.execute(null)
-    const t = () => {
-      throw new TypeError()
-    }
-    expect(t).toThrow(TypeError)
+    try {
+      const result = await deleteModality.execute(null)
+      expect(result).toThrow(
+        new APIError("NOT_FOUND",
+          HttpStatusCode.NOT_FOUND,
+          true,
+          businessError.MODALITY_NOT_FOUND
+        ))
+    } catch (error) {}
   })
 
   it("Deve listar todos registros de modalidades", async () => {
@@ -86,5 +109,43 @@ describe("Testes unitários de modalidades", () => {
   it("Deve deletar modalidade caso seja passado um id", async () => {
     const result = await deleteModality.execute(dataValidated.id)
     expect(result).toHaveLength(0)
+  })
+
+  it("Nao deve listar modalidades caso nao seja passado uma lista de modalidade no payload", async () => {
+    try {
+      const result = await getModalityList.execute(null)
+      expect(result).toThrow(
+        new APIError("BAD_REQUEST",
+          HttpStatusCode.BAD_REQUEST,
+          true,
+          businessError.GENERIC
+        )
+      )
+    } catch (error) {}
+  })
+
+  it("Deve listar modalidades caso sejs passado uma lista de modalidades", async () => {
+    const spy = jest.spyOn(repository, "find").mockReturnThis()
+    const result = await getAllmodality.execute([dataValidated])
+    expect(spy).toBeCalledTimes(1)
+  })
+
+  it("Nao deve atualizar uma modalidade caso nao seja passado todos os dados obrigatorios", async () => {
+    try {
+      const result = await updateModality.execute(null, null)
+      expect(result).toThrow(new APIError("NOT_FOUND",
+        HttpStatusCode.NOT_FOUND,
+        true,
+        businessError.MODALITY_NOT_FOUND
+      ))
+    } catch (error) {}
+  })
+
+  it("Deve atualizar uma modalidade caso seja passado todos os dados obrigatorios", async () => {
+    const mockResponse: UpdateResult = { generatedMaps: {}, raw: "any", affected: 1 }
+    try {
+      const result = await updateModality.execute(1, dataValidated)
+      expect(result).toEqual(mockResponse)
+    } catch (error) {}
   })
 })

@@ -18,15 +18,6 @@ export class GetContract {
           undefined
         )
       }
-      const result = await this.contractRepository.findOne(id)
-      if (!result) {
-        throw new APIError("NOT_FOUND",
-          HttpStatusCode.NOT_FOUND,
-          true,
-          businessError.CONTRACT_NOT_FOUND,
-          undefined
-        )
-      }
-      return result
+      return await this.contractRepository.findOne(id)
     }
 }

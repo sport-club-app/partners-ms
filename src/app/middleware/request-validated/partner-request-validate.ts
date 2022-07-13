@@ -9,14 +9,6 @@ export class PartnerRequestValidate {
   async create (req: Request, res: Response, next: NextFunction) {
     const matched = await fieldValidated(req.body)
     try {
-      if (!req.body) {
-        throw new APIError("BAD_REQUEST",
-          HttpStatusCode.BAD_REQUEST,
-          true,
-          businessError.GENERIC,
-          undefined
-        )
-      }
       if (matched) {
         throw new APIError("UNPROCESSABLE_ENTITY",
           HttpStatusCode.UNPROCESSABLE_ENTITY,

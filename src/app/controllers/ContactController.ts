@@ -18,7 +18,7 @@ class ContractController {
     const data: Contact = req.body
     try {
       const result = await saveContactUseCase.execute(data)
-      await producerNotification.execute(JSON.stringify(result), process.env.PARTNER_TOPIC_CONTACT)
+      await producerNotification.execute(JSON.stringify(result), "partners-ms-notification")
       return res.status(201).send(result)
     } catch (error) {
       return errorHandlerMiddleware.returnError(error, req, res, next)
@@ -51,7 +51,7 @@ class ContractController {
         contact.partnerId,
         contact
       )
-      await producerNotification.execute(JSON.stringify(result), process.env.PARTNER_TOPIC_CONTACT)
+      await producerNotification.execute(JSON.stringify(result), "partners-ms-notification")
       return res.status(201).send(result)
     } catch (error) {
       return errorHandlerMiddleware.returnError(error, req, res, next)
