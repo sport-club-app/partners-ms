@@ -4,7 +4,7 @@ import { HttpStatusCode } from "@/app/exceptions/interfaces"
 import businessError from "@/app/exceptions/business-error"
 import { APIError } from "@/app/exceptions/base-error"
 
-export class UpdateOneContact {
+export class UpdateContact {
     private contactRepository: IContactRepositoryDbMethods
     constructor (contactRepository: ContactRepositoryDb) {
       this.contactRepository = contactRepository
@@ -15,19 +15,9 @@ export class UpdateOneContact {
         throw new APIError("BAD_REQUEST",
           HttpStatusCode.BAD_REQUEST,
           true,
-          businessError.GENERIC,
-          undefined
+          businessError.GENERIC
         )
       }
-      const result = await this.contactRepository.updateContact(id, partnerId, contact)
-      if (!result) {
-        throw new APIError("NOT_FOUND",
-          HttpStatusCode.NOT_FOUND,
-          true,
-          businessError.CONTACT_NOT_FOUND,
-          undefined
-        )
-      }
-      return result
+      return await this.contactRepository.updateContact(id, partnerId, contact)
     }
 }

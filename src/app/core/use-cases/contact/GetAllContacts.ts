@@ -10,15 +10,6 @@ export class GetAllContacts {
     }
 
     async execute () {
-      const result = await this.contactRepository.find()
-      if (!result) {
-        throw new APIError("NOT_FOUND",
-          HttpStatusCode.NOT_FOUND,
-          true,
-          businessError.CONTACT_NOT_FOUND,
-          undefined
-        )
-      }
-      return result
+      return await this.contactRepository.find()
     }
 }

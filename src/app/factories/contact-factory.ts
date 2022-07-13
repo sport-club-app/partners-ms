@@ -1,7 +1,7 @@
 import { ContactRepositoryDb } from "@/app/repository/ContactRepositoryDb"
 import {
   SaveOneContact,
-  UpdateOneContact,
+  UpdateContact,
   DeleteContact,
   GetContact,
   GetAllContacts
@@ -15,7 +15,7 @@ const repository = entityManager.getRepository(ContactModel)
 export const contactFactory = () => {
   const contactRepository = new ContactRepositoryDb(repository)
   const saveContactUseCase = new SaveOneContact(contactRepository)
-  const updateContactUseCase = new UpdateOneContact(contactRepository)
+  const updateContactUseCase = new UpdateContact(contactRepository)
   const deleteContactUseCase = new DeleteContact(contactRepository)
   const getContactUseCase = new GetContact(contactRepository)
   const getAllContacts = new GetAllContacts(contactRepository)

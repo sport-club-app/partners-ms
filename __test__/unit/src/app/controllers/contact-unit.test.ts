@@ -1,7 +1,7 @@
 import ContactController from "@/app/controllers/ContactController"
 import { Contact } from "@/app/core/entity"
 import EntityMock from "../../../../mocks/entities"
-import { SaveOneContact, GetContact, UpdateOneContact, GetAllContacts, DeleteContact } from "@/app/core/use-cases/contact"
+import { SaveOneContact, GetContact, UpdateContact, GetAllContacts, DeleteContact } from "@/app/core/use-cases/contact"
 import { ContactRepositoryDb } from "@/app/repository/ContactRepositoryDb"
 import { ContactModel } from "@/infra/models/ContactModel"
 import { entityManager } from "@/infra/db/config"
@@ -18,7 +18,7 @@ const repositoryMock = RepositoryMock as jest.Mocked<Repository<ContactModel>>
 const contactRepository = new ContactRepositoryDb(repositoryMock)
 const saveOneContact = new SaveOneContact(contactRepository)
 const getContact = new GetContact(contactRepository)
-const updateOneContact = new UpdateOneContact(contactRepository)
+const updateOneContact = new UpdateContact(contactRepository)
 const getAllContacts = new GetAllContacts(contactRepository)
 const deleteContact = new DeleteContact(contactRepository)
 
