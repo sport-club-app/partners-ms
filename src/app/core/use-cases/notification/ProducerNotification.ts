@@ -1,5 +1,5 @@
 import { Kafka } from "kafkajs"
-import { uuid } from "uuidv4"
+import { randomUUID } from "crypto"
 
 export class ProducerNotification {
     private kafka: Kafka;
@@ -12,7 +12,7 @@ export class ProducerNotification {
       await producer.connect()
       await producer.send({
         topic: topic,
-        messages: [{ value: message, key: uuid() }]
+        messages: [{ value: message, key: randomUUID() }]
       })
       await producer.disconnect()
     }

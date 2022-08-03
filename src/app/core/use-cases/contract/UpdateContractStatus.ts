@@ -20,7 +20,7 @@ export class UpdateContractStatus {
           undefined
         )
       }
-      if (!contract.status) return !contract.status
+      // if (!contract.status) return !contract.status
       const start = parseISO(String(contract.start))
       const end = parseISO(String(contract.dueDate))
       const resultCalcDueDate = compareAsc(parseISO(String(contract.start)), parseISO(String(contract.dueDate)))
@@ -34,6 +34,7 @@ export class UpdateContractStatus {
         start: resultCalcStartDate == 1 ? endDateSubMonth : start,
         dueDate: resultCalcDueDate == 1 ? startDateAddMonth : end
       }
+
       const result = await this.contractRepository.updateWithPartner(id, partnerId, data)
       if (!result) {
         throw new APIError("NOT_FOUND",

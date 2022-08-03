@@ -14,14 +14,14 @@ export const modalityFactory: Modality[] =
 
 export async function runFactory (connection: DataSource) {
   async function deleteTable () {
-    await connection.query(`DELETE FROM partners`)
-    await connection.query(`ALTER TABLE partners AUTO_INCREMENT = 1`)
-    await connection.query(`DELETE FROM modalities`)
-    await connection.query(`ALTER TABLE modalities AUTO_INCREMENT = 1`)
-    await connection.query(`DELETE FROM contacts`)
-    await connection.query(`ALTER TABLE contacts AUTO_INCREMENT = 1`)
-    await connection.query(`DELETE FROM contracts`)
-    await connection.query(`ALTER TABLE contracts AUTO_INCREMENT = 1`)
+    // await connection.query(`DELETE FROM partners`)
+    // await connection.query(`ALTER TABLE partners AUTO_INCREMENT = 1`)
+    // await connection.query(`DELETE FROM modalities`)
+    // await connection.query(`ALTER TABLE modalities AUTO_INCREMENT = 1`)
+    // await connection.query(`DELETE FROM contacts`)
+    // await connection.query(`ALTER TABLE contacts AUTO_INCREMENT = 1`)
+    // await connection.query(`DELETE FROM contracts`)
+    // await connection.query(`ALTER TABLE contracts AUTO_INCREMENT = 1`)
   }
 
   async function insertData () {
