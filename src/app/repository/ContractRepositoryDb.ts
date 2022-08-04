@@ -1,6 +1,6 @@
 import { Contract } from "@/app/core/entity"
 import { ContractModel } from "@/infra/models/ContractModel"
-import { Repository } from "typeorm"
+import { Repository, UpdateResult } from "typeorm"
 import { IRepositoryDbMethodsBase } from "./RepositoryBase"
 
 export interface IContractRepositoryDbMethods
@@ -11,6 +11,7 @@ export interface IContractRepositoryDbMethods
         partnerId: number,
         contract: Contract
     ): Promise<any>;
+    updateStatus(id:number, status:number): Promise<void>
 }
 
 export class ContractRepositoryDb implements IContractRepositoryDbMethods {
@@ -32,6 +33,10 @@ export class ContractRepositoryDb implements IContractRepositoryDbMethods {
     })
   }
 
+  async update (id: number, data: Contract) {
+    return await this.repository.update(id, data)
+  }
+
   async updateWithPartner (id: number, partnerId: number, contract: Contract) {
     return await this.repository.update(id, {
       ...contract,
@@ -39,8 +44,8 @@ export class ContractRepositoryDb implements IContractRepositoryDbMethods {
     })
   }
 
-  async update (id: number, contract: Contract) {
-    return await this.repository.update(id, contract)
+  async updateStatus (id: number, status: number) {
+    await this.repository.update(id, { status })
   }
 
   async deleteWithPartner (id: number, partnerId: number) {

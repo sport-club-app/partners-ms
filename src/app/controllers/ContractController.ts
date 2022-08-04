@@ -9,7 +9,7 @@ const {
   getAllContractUseCase,
   getContractUseCase,
   saveOneContractUseCase,
-  updateContractStatusUseCase
+  updateWithPartner
 } = contractFactory()
 
 class ContractController {
@@ -26,7 +26,7 @@ class ContractController {
   async updateContractStatus (req: Request, res: Response, next: NextFunction) {
     const contract: Contract = req.body
     try {
-      const result = await updateContractStatusUseCase.execute(Number(req.params.id), contract.partnerId, contract)
+      const result = await updateWithPartner.execute(Number(req.params.id), contract.partnerId, contract)
       return res.status(HttpStatusCode.NO_CONTENT).send(result)
     } catch (error) {
       return errorHandlerMiddleware.returnError(error, req, res, next)

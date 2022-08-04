@@ -17,8 +17,8 @@ export class ContractModel implements Contract {
     @Column("boolean")
     isActive: boolean
 
-    @Column("text")
-    status: string
+    @Column("int")
+    status: number
 
     @Column({ type: "bigint", nullable: true })
     modalityId: number

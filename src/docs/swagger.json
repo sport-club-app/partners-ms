@@ -1037,7 +1037,7 @@
                                             "type": "string"
                                         },
                                         "status": {
-                                            "type": "string"
+                                            "type": "number"
                                         },
                                         "isActive": {
                                             "type": "boolean"
@@ -1108,7 +1108,7 @@
                                             "type": "string"
                                         },
                                         "status": {
-                                            "type": "string"
+                                            "type": "number"
                                         },
                                         "isActive": {
                                             "type": "boolean"
@@ -1153,8 +1153,8 @@
                                         "description": "define a data de inicio do contrato"
                                     },
                                     "status": {
-                                        "type": "string",
-                                        "description": "define o status atual podendo ser Ativo, Suspenso, ou Cancelado"
+                                        "type": "number",
+                                        "description": "define o status atual podendo ser Pendente, Pago, ou Cancelado"
                                     },
                                     "isActive": {
                                         "type": "boolean",
@@ -1259,7 +1259,7 @@
                                         "description": "define a data de inicio do contrato"
                                     },
                                     "status": {
-                                        "type": "string",
+                                        "type": "number",
                                         "description": "define o status atual podendo ser Ativo, Suspenso, ou Cancelado"
                                     },
                                     "isActive": {
@@ -1426,7 +1426,7 @@
                                             "start": "2021-01-01",
                                             "dueDate": "2021-02-01",
                                             "isActive": true,
-                                            "status": "ativo"
+                                            "status": 2
                                         }
                                     },
                                     {
@@ -1435,7 +1435,7 @@
                                             "start": "2021-01-01",
                                             "dueDate": "2021-02-01",
                                             "isActive": true,
-                                            "status": "ativo"
+                                            "status": 2
                                         }
                                     }
                                 ]
@@ -1521,7 +1521,7 @@
                                             "start": "2021-01-01",
                                             "dueDate": "2021-02-01",
                                             "isActive": true,
-                                            "status": "ativo",
+                                            "status": 2,
                                             "modalityId": 4,
                                             "partnerId": 4,
                                             "id": 9,
@@ -1532,7 +1532,7 @@
                                             "start": "2021-01-01",
                                             "dueDate": "2021-02-01",
                                             "isActive": true,
-                                            "status": "ativo",
+                                            "status": 2,
                                             "modalityId": 5,
                                             "partnerId": 4,
                                             "id": 10,
@@ -1634,7 +1634,7 @@
                                             "start": "2021-01-01",
                                             "dueDate": "2021-02-01",
                                             "isActive": true,
-                                            "status": "ativo",
+                                            "status": 2,
                                             "modalityId": 4,
                                             "partnerId": 4,
                                             "id": 9,
@@ -1645,7 +1645,7 @@
                                             "start": "2021-01-01",
                                             "dueDate": "2021-02-01",
                                             "isActive": true,
-                                            "status": "ativo",
+                                            "status": 2,
                                             "modalityId": 5,
                                             "partnerId": 4,
                                             "id": 10,
@@ -1725,7 +1725,7 @@
                                                 "type": "boolean"
                                             },
                                             "status": {
-                                                "type": "string"
+                                                "type": "number"
                                             }
                                         }
                                     }
@@ -1821,7 +1821,7 @@
                                         "type": "boolean"
                                     },
                                     "status": {
-                                        "type": "string"
+                                        "type": "number"
                                     },
                                     "modalityId": {
                                         "type": "number"

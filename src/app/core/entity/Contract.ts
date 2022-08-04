@@ -4,7 +4,7 @@ export interface Contract {
     start: Date
     dueDate: Date
     isActive: boolean
-    status: string
+    status: number
     createdAt?: Date
     updatedAt?: Date
     modalityId?: number

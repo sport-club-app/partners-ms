@@ -10,7 +10,7 @@ import { keycloak } from "@/infra/services/keycloak/config"
 import { errorHandlerMiddleware } from "@/app/middleware/error-handler"
 import { authMiddleware } from "@/app/middleware/auth-middleware"
 import { getNewRefreshToken } from "@/app/middleware/get-refresh-token"
-import { getStatusContractEvent } from "@/app/events/contract-status.events"
+import { contractConsumer } from "@/app/consumers/contract.consumer"
 
 const version = getVersionApi()
 
@@ -34,6 +34,6 @@ server.use(keycloak.middleware({
   admin: "/"
 }))
 
-getStatusContractEvent()
+contractConsumer()
 
 server.use(`/${version}`, router)
