@@ -1,7 +1,7 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Api de gerenciamento de cadastro de sócios",
+        "title": "Partners Api",
         "description": "Tem por objetivo manipular dados referentes ao cadastro de sócios de um clube de esportes",
         "termsOfService": "https://github.com/pablords/partners",
         "contact": {
