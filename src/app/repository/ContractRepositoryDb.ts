@@ -45,6 +45,10 @@ export class ContractRepositoryDb implements IContractRepositoryDbMethods {
   }
 
   async updateStatus (id: number, status: number) {
+    if (status == 2) {
+      await this.repository.update(id, { status, isActive: true })
+      return
+    }
     await this.repository.update(id, { status })
   }
 
